@@ -40,7 +40,34 @@ class Drone_Ui(object):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
 
+#自定义标题栏
+class CustomTitleBar(QtWidgets.QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        layout = QtWidgets.QHBoxLayout(self)
+        self.label = QtWidgets.QLabel("无人机应急药物投送智能决策系统")
+        font = QtGui.QFont("楷体", 18)
+        self.label.setFont(font)
+        layout.addWidget(self.label)
+        layout.addStretch()
+        self.setFixedHeight(60)
+        self.setStyleSheet("background-color: white; color: black;")
+
+        
+
 class Drone_Window(QtWidgets.QMainWindow,Drone_Ui):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+
+        self.title_bar=CustomTitleBar(self)
+        central_widget = QtWidgets.QWidget()
+        layout = QtWidgets.QVBoxLayout(central_widget)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.addWidget(self.title_bar)
+
+        content = QtWidgets.QLabel("这里是内容区域")
+        layout.addWidget(content)
+
+        self.setCentralWidget(central_widget)

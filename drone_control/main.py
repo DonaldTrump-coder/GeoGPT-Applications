@@ -11,7 +11,7 @@ class DroneTaskThread(QtCore.QThread):
     log_signal = QtCore.pyqtSignal(str)
     finished_signal = QtCore.pyqtSignal()
 
-    def __init__(self, drone, analyzer,parent=None):
+    def __init__(self, drone:DroneController, analyzer:Agent_Processor,parent=None):
         super().__init__(parent)
         self.drone=drone
         self.analyzer=analyzer

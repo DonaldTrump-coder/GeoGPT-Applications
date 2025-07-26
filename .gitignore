@@ -1,3 +1,4 @@
 data/
 API_keys.csv
 to_do.txt
+**/__pycache__/
