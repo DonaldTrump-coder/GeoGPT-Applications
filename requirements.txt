@@ -1,0 +1,8 @@
+requests
+openai
+pillow
+tqdm
+opencv-python-headless
+numpy
+msgpack-rpc-python
+airsim
