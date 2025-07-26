@@ -2,6 +2,51 @@ import time
 import os
 from DroneController import DroneController
 from Agent_Processor import Agent_Processor
+from PyQt5 import QtWidgets,QtCore
+import sys
+from ui.dronetask_display import Drone_Window
+
+#创建一个新线程，用来执行无人机任务（和UI分开）
+class DroneTaskThread(QtCore.QThread):
+    log_signal = QtCore.pyqtSignal(str)
+    finished_signal = QtCore.pyqtSignal()
+
+    def __init__(self, drone, analyzer,parent=None):
+        super().__init__(parent)
+        self.drone=drone
+        self.analyzer=analyzer
+
+    def run(self):
+        try:
+        # 任务执行
+            print("【任务开始】无人机起飞...")
+            self.log_signal.emit("【任务开始】无人机起飞...")
+            self.drone.takeoff(altitude=15)
+
+            for i in range(3):  # 拍摄3张不同角度照片
+                print(f"\n【拍摄第{i + 1}张照片】")
+                self.log_signal.emit(f"\n【拍摄第{i + 1}张照片】")
+                img_path = f"captures/scene_{i}.png"
+                self.drone.capture_image(img_path)
+
+                # 分析场景内容（问题适配模型的理解范围）
+                question = "请详细描述当前场景中可见的主要物体、它们的颜色和空间分布关系"
+                print(f"\n【场景分析结果】")
+                analysis = self.analyzer.analyze_scene(img_path, question)
+                print(analysis)
+
+                time.sleep(3)  # 增加间隔时间，避免请求过于频繁
+                self.drone.turn_left(3.14/2).join()
+
+            self.drone.go_back()
+
+        except Exception as e:
+            print(f"\n【任务执行错误】{str(e)}")
+            self.log_signal.emit(f"\n【任务执行错误】{str(e)}")
+        finally:
+            print("\n【任务完成】无人机降落...")
+            self.log_signal.emit("\n【任务完成】无人机降落...")
+            self.drone.land()
 
 # 主任务流程
 def main():
@@ -22,32 +67,15 @@ def main():
     # 创建保存目录
     os.makedirs("captures", exist_ok=True)
 
-    try:
-        # 任务执行
-        print("【任务开始】无人机起飞...")
-        drone.takeoff(altitude=15)
+    app=QtWidgets.QApplication(sys.argv)
+    window=Drone_Window()
+    window.show()
 
-        for i in range(3):  # 拍摄3张不同角度照片
-            print(f"\n【拍摄第{i + 1}张照片】")
-            img_path = f"captures/scene_{i}.png"
-            drone.capture_image(img_path)
+    drone_task_thread=DroneTaskThread(drone,analyzer)
 
-            # 分析场景内容（问题适配模型的理解范围）
-            question = "请详细描述当前场景中可见的主要物体、它们的颜色和空间分布关系"
-            print(f"\n【场景分析结果】")
-            analysis = analyzer.analyze_scene(img_path, question)
-            print(analysis)
+    drone_task_thread.start()
 
-            time.sleep(3)  # 增加间隔时间，避免请求过于频繁
-            drone.turn_left(3.14/2).join()
-
-        drone.go_back()
-
-    except Exception as e:
-        print(f"\n【任务执行错误】{str(e)}")
-    finally:
-        print("\n【任务完成】无人机降落...")
-        drone.land()
+    sys.exit(app.exec_())
 
 
 if __name__ == "__main__":

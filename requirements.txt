@@ -6,3 +6,4 @@ opencv-python-headless
 numpy
 msgpack-rpc-python
 airsim
+PyQt5
