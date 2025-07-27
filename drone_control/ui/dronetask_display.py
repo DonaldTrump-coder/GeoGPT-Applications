@@ -9,9 +9,12 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Drone_Ui(object):
-    def setupUi(self, Form):
+    def setupUi(self, 
+                Form:QtWidgets.QMainWindow
+                ):
         Form.setObjectName("Form")
         Form.resize(1351, 815)
+        Form.setStyleSheet("background-color: white;")
         self.frame = QtWidgets.QFrame(Form)
         self.frame.setGeometry(QtCore.QRect(10, 10, 1011, 531))
         self.frame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
@@ -44,16 +47,24 @@ class Drone_Ui(object):
 class CustomTitleBar(QtWidgets.QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
-        layout = QtWidgets.QHBoxLayout(self)
+        self.layout = QtWidgets.QHBoxLayout(self)
         self.label = QtWidgets.QLabel("无人机应急药物投送智能决策系统")
         font = QtGui.QFont("楷体", 18)
         self.label.setFont(font)
-        layout.addWidget(self.label)
-        layout.addStretch()
+        self.layout.addWidget(self.label)
+        self.layout.addStretch()
         self.setFixedHeight(60)
         self.setStyleSheet("background-color: white; color: black;")
 
-        
+        self.btn_min = QtWidgets.QPushButton()
+        self.btn_min.setIcon(QtGui.QIcon("icons/minimize-sign.png"))
+        self.btn_min.setFixedSize(20, 20)
+        self.btn_close = QtWidgets.QPushButton()
+        self.btn_close.setIcon(QtGui.QIcon("icons/cross.png"))
+        self.btn_close.setFixedSize(20, 20)
+        self.btn_max_restore = QtWidgets.QPushButton()
+        self.btn_max_restore.setIcon(QtGui.QIcon("icons/maximise.png"))
+        self.btn_max_restore.setFixedSize(20, 20)
 
 class Drone_Window(QtWidgets.QMainWindow,Drone_Ui):
     def __init__(self):
@@ -66,8 +77,25 @@ class Drone_Window(QtWidgets.QMainWindow,Drone_Ui):
         layout = QtWidgets.QVBoxLayout(central_widget)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self.title_bar)
+        
+        self.title_bar.btn_min.clicked.connect(self.showMinimized)
+        self.title_bar.layout.addWidget(self.title_bar.btn_min)
+
+        self.title_bar.btn_max_restore.clicked.connect(self.toggle_max_restore)
+        self.title_bar.layout.addWidget(self.title_bar.btn_max_restore)
+        
+        self.title_bar.btn_close.clicked.connect(self.close)
+        self.title_bar.layout.addWidget(self.title_bar.btn_close)
 
         content = QtWidgets.QLabel("这里是内容区域")
-        layout.addWidget(content)
+        layout.addWidget(content,)
 
         self.setCentralWidget(central_widget)
+
+    def toggle_max_restore(self):
+        if self.isMaximized():
+            self.showNormal()
+            self.title_bar.btn_max_restore.setIcon(QtGui.QIcon("icons/maximise.png"))
+        else:
+            self.showMaximized()
+            self.title_bar.btn_max_restore.setIcon(QtGui.QIcon("icons/restore-down.png"))
