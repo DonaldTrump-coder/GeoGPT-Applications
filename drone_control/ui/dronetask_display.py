@@ -53,7 +53,7 @@ class Drone_Window(QtWidgets.QMainWindow,Drone_Ui):
         self.setupUi(self)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
 
-        self.title_bar=CustomTitleBar(self)
+        self.title_bar=CustomTitleBar()
         central_widget = QtWidgets.QWidget()
         layout = QtWidgets.QVBoxLayout(central_widget)
         layout.setContentsMargins(0, 0, 0, 0)
@@ -68,7 +68,7 @@ class Drone_Window(QtWidgets.QMainWindow,Drone_Ui):
         self.title_bar.btn_close.clicked.connect(self.close)
         self.title_bar.layout.addWidget(self.title_bar.btn_close)
 
-        self.content = MainContentLayout(self)
+        self.content = MainContentLayout()
         layout.addWidget(self.content)
 
         self.setCentralWidget(central_widget)

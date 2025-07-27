@@ -10,8 +10,9 @@ class CustomTitleBar(QtWidgets.QWidget):
         self.label.setFont(font)
         self.layout.addWidget(self.label)
         self.layout.addStretch()
-        self.setFixedHeight(60)
+        self.setFixedHeight(55)
         self.setStyleSheet("background-color: white; color: black;")
+        self.layout.setContentsMargins(2,2,2,2)
 
         #增加右上角三个按钮控件
         self.btn_min = QtWidgets.QPushButton()

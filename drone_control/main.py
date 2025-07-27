@@ -23,20 +23,14 @@ class DroneTaskThread(QtCore.QThread):
             self.log_signal.emit("【任务开始】无人机起飞...")
             self.drone.takeoff(altitude=15)
 
-            for i in range(3):  # 拍摄3张不同角度照片
-                print(f"\n【拍摄第{i + 1}张照片】")
-                self.log_signal.emit(f"\n【拍摄第{i + 1}张照片】")
-                img_path = f"captures/scene_{i}.png"
-                self.drone.capture_image(img_path)
+            print("开始拍摄照片")
+            path="captures"
+            img_path=self.drone.capture_images(path,"scene")
 
-                # 分析场景内容（问题适配模型的理解范围）
-                question = "请详细描述当前场景中可见的主要物体、它们的颜色和空间分布关系"
-                print(f"\n【场景分析结果】")
-                analysis = self.analyzer.analyze_scene(img_path, question)
-                print(analysis)
-
-                time.sleep(3)  # 增加间隔时间，避免请求过于频繁
-                self.drone.turn_left(3.14/2).join()
+            question = "请详细描述当前场景中可见的主要物体、它们的颜色和空间分布关系"
+            print(f"\n【场景分析结果】")
+            analysis = self.analyzer.analyze_scene(img_path+"_front.png", question)
+            print(analysis)
 
             self.drone.go_back()
 
