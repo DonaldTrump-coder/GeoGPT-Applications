@@ -29,11 +29,11 @@ class DroneController:
         #同时拍摄多张图像（）
         responses=self.client.simGetImages(
             [
-                airsim.ImageRequest("front", airsim.ImageType.Scene, False, False),
-                airsim.ImageRequest("down", airsim.ImageType.Scene, False, False),
-                airsim.ImageRequest("back", airsim.ImageType.Scene, False, False),
-                airsim.ImageRequest("left", airsim.ImageType.Scene, False, False),
-                airsim.ImageRequest("right", airsim.ImageType.Scene, False, False)
+                airsim.ImageRequest("front", airsim.ImageType.Scene),
+                airsim.ImageRequest("down", airsim.ImageType.Scene),
+                airsim.ImageRequest("back", airsim.ImageType.Scene),
+                airsim.ImageRequest("left", airsim.ImageType.Scene),
+                airsim.ImageRequest("right", airsim.ImageType.Scene)
             ]
         )
         image_names=[save_name+"_front.png",save_name+"_down.png",save_name+"_top.png",save_name+"_left.png",save_name+"_right.png"]
