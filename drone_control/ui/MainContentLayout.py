@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets,QtGui
+from PyQt5 import QtWidgets,QtGui,QtCore
 
 class MultiMediaDisplay(QtWidgets.QWidget):
     def __init__(self, parent = None):
@@ -10,14 +10,29 @@ class MultiMediaDisplay(QtWidgets.QWidget):
         self.layout.addWidget(self.videodisplay)
         self.layout.setContentsMargins(2,2,2,2)
 
+#聊天区域
 class ChatDisplay(QtWidgets.QWidget):
     def __init__(self, parent = None):
         super().__init__(parent)
-        self.chat=QtWidgets.QLabel("聊天区")
-        self.chat.setStyleSheet("background-color: gray;")
-        self.layout=QtWidgets.QHBoxLayout(self)
-        self.layout.addWidget(self.chat)
+        self.chatlabel=QtWidgets.QLabel("聊天区")
+        self.chatlabel.setStyleSheet("background-color: gray;")
+
+        self.messagedisplay=MessageDisplay()
+
+        self.layout=QtWidgets.QVBoxLayout(self)
+        self.layout.addWidget(self.chatlabel)
+        self.layout.addWidget(self.messagedisplay)
         self.layout.setContentsMargins(2,2,2,2)
+
+class MessageDisplay(QtWidgets.QScrollArea):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.message_area=QtWidgets.QVBoxLayout()
+        self.message_area.setAlignment(QtCore.Qt.AlignTop)
+        container=QtWidgets.QWidget()
+        container.setLayout(self.message_area)
+        self.setWidgetResizable(True)
+        self.setWidget(container)
 
 class MainContentLayout(QtWidgets.QWidget):
     def __init__(self, parent = None):

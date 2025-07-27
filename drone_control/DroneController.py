@@ -31,9 +31,9 @@ class DroneController:
             [
                 airsim.ImageRequest("front", airsim.ImageType.Scene, False, False),
                 airsim.ImageRequest("down", airsim.ImageType.Scene, False, False),
-                airsim.ImageRequest("top", airsim.ImageType.Scene, False, False),
+                airsim.ImageRequest("back", airsim.ImageType.Scene, False, False),
                 airsim.ImageRequest("left", airsim.ImageType.Scene, False, False),
-                airsim.ImageRequest("right", airsim.ImageType.Scene, False, False),
+                airsim.ImageRequest("right", airsim.ImageType.Scene, False, False)
             ]
         )
         image_names=[save_name+"_front.png",save_name+"_down.png",save_name+"_top.png",save_name+"_left.png",save_name+"_right.png"]
@@ -54,7 +54,7 @@ class DroneController:
         print("无人机已返回")
 
     def turn_left(self,rad):
-        return self.client.moveByRollPitchYawThrottleAsync(0,0,rad,0.5,3)
+        return self.client.rotateByYawRateAsync(30, rad/30)
 
     def land(self):
         """安全降落"""
