@@ -18,11 +18,19 @@ class ChatDisplay(QtWidgets.QWidget):
         self.chatlabel.setStyleSheet("background-color: gray;")
 
         self.messagedisplay=MessageDisplay()
+        self.input_box=QtWidgets.QTextEdit()
+        self.input_box.setFixedHeight(30)
+        self.send_button=QtWidgets.QPushButton("发送")
+
+        self.input_layout=QtWidgets.QHBoxLayout()
+        self.input_layout.addWidget(self.input_box)
+        self.input_layout.addWidget(self.send_button)
 
         self.layout=QtWidgets.QVBoxLayout(self)
         self.layout.addWidget(self.chatlabel)
         self.layout.addWidget(self.messagedisplay)
-        self.layout.setContentsMargins(2,2,2,2)
+        self.layout.addLayout(self.input_layout)
+        self.layout.setContentsMargins(3,3,3,3)
 
 class MessageDisplay(QtWidgets.QScrollArea):
     def __init__(self, parent=None):

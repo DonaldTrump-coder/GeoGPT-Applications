@@ -43,7 +43,7 @@ class DroneController:
                 print(f"Failed to get image {image_names[i]}")
                 continue
 
-            frame = cv2.imdecode(np.frombuffer(response, np.uint8), cv2.IMREAD_COLOR)
+            frame = cv2.imdecode(np.frombuffer(response.image_data_uint8, np.uint8), cv2.IMREAD_COLOR)
             cv2.imwrite(save_dir+image_names[i], frame)
             print(f"Saved {image_names[i]}")
         

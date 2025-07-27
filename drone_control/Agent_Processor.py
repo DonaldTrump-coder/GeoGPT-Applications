@@ -30,6 +30,9 @@ class Agent_Processor:
         #用GeoGPT进行决策的提示词
         self.GeoGPT_prompts="Now you are controlling a drone to finish a task of sending medical tools or medicine to a patient object. You need to control the drone to take off, cruising from the starting point to near the object, and land correctly beside the object place. You will be provided with the description of the elements of the image and the actions you can take. You need to choose to take actions to finish evey step during the task."
 
+        #定义模型能够输出的指令
+        self.controlprompts=""
+
     #调用硅基流动的视觉语言模型进行图像描述，返回图像描述的文本
     def get_descriptions(self,image_path:str)->str:
         encoded_image=image2base64(image_path=image_path)
