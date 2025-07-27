@@ -26,7 +26,8 @@ class DroneController:
         return save_path
     
     def capture_images(self,save_dir,save_name: str)->str:
-        #同时拍摄多张图像（）
+        #同时拍摄多张图像（下视、前视、后视、左视、右视）
+        #函数返回一组图像保存的文件夹+名称（front、left这些需要自己加）
         responses=self.client.simGetImages(
             [
                 airsim.ImageRequest("front", airsim.ImageType.Scene),
@@ -42,7 +43,8 @@ class DroneController:
             if response.width == 0:
                 print(f"Failed to get image {image_names[i]}")
                 continue
-
+            
+            #将图像解译成png格式
             frame = cv2.imdecode(np.frombuffer(response.image_data_uint8, np.uint8), cv2.IMREAD_COLOR)
             cv2.imwrite(save_dir+image_names[i], frame)
             print(f"Saved {image_names[i]}")
