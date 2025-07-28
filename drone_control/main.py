@@ -6,7 +6,7 @@ from PyQt5 import QtWidgets,QtCore
 import sys
 from ui.dronetask_display import Drone_Window
 
-stream_url=""
+stream_url="http://127.0.0.1"
 
 #创建一个新线程，用来执行无人机任务（和UI分开）
 class DroneTaskThread(QtCore.QThread):
@@ -59,6 +59,7 @@ def main():
         geogpt_url="https://geogpt.zero2x.org.cn/",
         connect_url="be-api/service/api/geoChat/generate",
         message_url="be-api/service/api/geoChat/sendMsg",
+        large_models_url="be-api/service/api/model/v1/chat/completions",
         geogpt_module="Qwen2.5-72B-GeoGPT"
     )
 
