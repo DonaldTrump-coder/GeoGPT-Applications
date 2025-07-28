@@ -7,11 +7,14 @@ import sys
 from ui.dronetask_display import Drone_Window
 
 stream_url="http://127.0.0.1"
+os.environ['QTWEBENGINE_CHROMIUM_FLAGS'] = '--enable-gpu-rasterization --ignore-gpu-blacklist --enable-zero-copy'
+QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseOpenGLES)
 
 #创建一个新线程，用来执行无人机任务（和UI分开）
 class DroneTaskThread(QtCore.QThread):
     log_signal = QtCore.pyqtSignal(str)
     finished_signal = QtCore.pyqtSignal()
+    captured_signal=QtCore.pyqtSignal(str)
 
     def __init__(self, drone:DroneController, analyzer:Agent_Processor,parent=None):
         super().__init__(parent)
@@ -30,6 +33,7 @@ class DroneTaskThread(QtCore.QThread):
             print("开始拍摄照片")
             path="captures"
             img_path=self.drone.capture_images(path,"scene")
+            self.captured_signal.emit(img_path)
 
             question = "请详细描述当前场景中可见的主要物体、它们的颜色和空间分布关系"
             print(f"\n【场景分析结果】")
@@ -71,6 +75,7 @@ def main():
     window.show()
 
     drone_task_thread=DroneTaskThread(drone,analyzer)
+    drone_task_thread.captured_signal.connect(window.show_captured_image)
 
     drone_task_thread.start()
 

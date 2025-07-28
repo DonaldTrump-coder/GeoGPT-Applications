@@ -1,5 +1,7 @@
 from openai import OpenAI
 from utils.image_tools import image2base64
+import requests
+import json
 
 # 初始化大模型API（适配硅基流动平台和GeoGPT）
 class Agent_Processor:
@@ -22,7 +24,7 @@ class Agent_Processor:
         self.api_key_geogpt=api_key_geogpt
         self.connect_url=geogpt_url+connect_url
         self.message_url=geogpt_url+message_url
-        self.api_url=geogpt_url+message_url
+        self.api_url=geogpt_url+large_models_url
         self.geogpt_model=geogpt_module
 
         self.messages=[]
@@ -119,6 +121,7 @@ class Agent_Processor:
             return None
 
     #调用geogpt大语言模型，获取指令
+    #调用模型之前将相关提示词加到self.messages中
     def post_large_language_model(self)->str:
         headers = {
         "authorization": f"Bearer {self.api_key_geogpt}",
@@ -128,3 +131,45 @@ class Agent_Processor:
             "messages":self.messages,
             "stream":True
         }
+        responses = []  # Store all response chunks
+
+        # Send POST request (enable streaming response)
+        with requests.post(self.api_url, headers=headers, json=payload, stream=True) as response:
+            # Check response status
+            response.raise_for_status()
+
+            for chunk in response.iter_lines():
+                # Filter out keep-alive new lines
+                if chunk:
+                    decoded_chunk = chunk.decode('utf-8')
+                    # Handle possible Server-Sent Events (SSE) format
+                    if decoded_chunk.startswith("data:"):
+                        json_str = decoded_chunk[5:]
+                    else:
+                        json_str = decoded_chunk
+
+                    # Check for message event tag
+                    if json_str == 'event:message':
+                        continue
+                    # Check for end flag
+                    if json_str.strip() == "[DONE]":
+                        break
+                            
+                    # Unescape handling:
+                    # 1. Replace \" with "
+                    # 2. Replace \\ with \
+                    unescaped_str = json_str.replace('\\"', '"').replace('\\\\', '\\')
+
+                    if unescaped_str.startswith('"') and unescaped_str.endswith('"'):
+                        # Remove outer quotes
+                        unescaped_str = unescaped_str[1:-1]
+
+                        # Parse JSON
+                    data = json.loads(unescaped_str)
+                    responses.append(data)  # Save response
+        full_content=""
+        for response in responses:
+            if 'choices' in response and response['choices']:
+                content = response['choices'][0]['delta']['content']
+                full_content += content
+        return full_content

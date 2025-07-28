@@ -25,13 +25,13 @@ class MultiMediaDisplay(QtWidgets.QWidget):
         self.image1=QtWidgets.QLabel("前视", self.container)
         self.image1.setFixedSize(280, 160)
         self.image1.move(10,580)
-        self.image1.setStyleSheet("background-color: white; color: white;")
+        self.image1.setStyleSheet("background-color: #222; color: white; border: 1px solid #555;")
         self.image1.setAlignment(QtCore.Qt.AlignCenter)
 
         self.image2=QtWidgets.QLabel("后视", self.container)
         self.image2.setFixedSize(280, 160)
         self.image2.move(610,580)
-        self.image2.setStyleSheet("background-color: white; color: white;")
+        self.image2.setStyleSheet("background-color: #222; color: white; border: 1px solid #555;")
         self.image2.setAlignment(QtCore.Qt.AlignCenter)
 
         self.image3=QtWidgets.QLabel("左视")
@@ -52,6 +52,9 @@ class MultiMediaDisplay(QtWidgets.QWidget):
         layout.addLayout(image_row_layout)
         layout.setContentsMargins(5, 5, 5, 5)
         layout.setSpacing(10)
+
+    def show_captured_image(self,img_path):
+        img_path+"_front.png"
 
 #聊天区域
 class ChatDisplay(QtWidgets.QWidget):
