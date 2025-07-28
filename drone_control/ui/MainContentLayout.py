@@ -54,7 +54,33 @@ class MultiMediaDisplay(QtWidgets.QWidget):
         layout.setSpacing(10)
 
     def show_captured_image(self,img_path):
-        img_path+"_front.png"
+        front_path=img_path+"_front.png"
+        down_path=img_path+"_down.png"
+        back_path=img_path+"_back.png"
+        left_path=img_path+"_left.png"
+        right_path=img_path+"_right.png"
+
+        front_pix=QtGui.QPixmap(front_path).scaled(self.image1.size(), 
+                              aspectRatioMode=QtCore.Qt.KeepAspectRatio, 
+                              transformMode=QtCore.Qt.SmoothTransformation)
+        down_pix=QtGui.QPixmap(down_path).scaled(self.image4.size(), 
+                              aspectRatioMode=QtCore.Qt.KeepAspectRatio, 
+                              transformMode=QtCore.Qt.SmoothTransformation)
+        back_pix=QtGui.QPixmap(back_path).scaled(self.image2.size(), 
+                              aspectRatioMode=QtCore.Qt.KeepAspectRatio, 
+                              transformMode=QtCore.Qt.SmoothTransformation)
+        left_pix=QtGui.QPixmap(left_path).scaled(self.image3.size(), 
+                              aspectRatioMode=QtCore.Qt.KeepAspectRatio, 
+                              transformMode=QtCore.Qt.SmoothTransformation)
+        right_pix=QtGui.QPixmap(right_path).scaled(self.image5.size(), 
+                              aspectRatioMode=QtCore.Qt.KeepAspectRatio, 
+                              transformMode=QtCore.Qt.SmoothTransformation)
+        
+        self.image1.setPixmap(front_pix)
+        self.image2.setPixmap(back_pix)
+        self.image3.setPixmap(left_pix)
+        self.image4.setPixmap(down_pix)
+        self.image5.setPixmap(right_pix)
 
 #聊天区域
 class ChatDisplay(QtWidgets.QWidget):

@@ -8,6 +8,15 @@ class DroneController:
         self.client.confirmConnection()
         self.client.enableApiControl(True)
         self.client.armDisarm(True)
+        self.get_drone_state()
+
+    #获取无人机此时的坐标
+    def get_drone_state(self):
+        pose=self.client.simGetVehiclePose(vehicle_name="SimpleFlight")
+        position=pose.position
+        self.x=position.x_val
+        self.y=position.y_val
+        self.z=position.z_val
 
     def takeoff(self, altitude: float = 10):
         """起飞到指定高度（米）"""

@@ -7,19 +7,19 @@
         "VehicleType": "SimpleFlight",
         "Cameras": {
             "front": {
-                "X": 0, "Y": 0, "Z": -1, "Pitch": 0, "Roll": 0, "Yaw": 0
+                "X": 0, "Y": 0, "Z": 1, "Pitch": 0, "Roll": 0, "Yaw": 0
             },
             "down": {
-                "X": 0, "Y": 0, "Z": -1, "Pitch": -90, "Roll": 0, "Yaw": 0
+                "X": 0, "Y": 0, "Z": 1, "Pitch": -90, "Roll": 0, "Yaw": 0
             },
             "back": {
-                "X": 0, "Y": 0, "Z": -1, "Pitch": 0, "Roll": 0, "Yaw": 180
+                "X": 0, "Y": 0, "Z": 1, "Pitch": 0, "Roll": 0, "Yaw": 180
             },
             "left": {
-                "X": 0, "Y": 0, "Z": -1, "Pitch": 0, "Roll": 0, "Yaw": -90
+                "X": 0, "Y": 0, "Z": 1, "Pitch": 0, "Roll": 0, "Yaw": -90
             },
             "right": {
-                "X": 0, "Y": 0, "Z": -1, "Pitch": 0, "Roll": 0, "Yaw": 90
+                "X": 0, "Y": 0, "Z": 1, "Pitch": 0, "Roll": 0, "Yaw": 90
             }
         }
     }
