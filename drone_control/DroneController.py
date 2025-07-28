@@ -65,7 +65,7 @@ class DroneController:
         print("无人机已返回")
 
     def turn_left(self,rad):
-        return self.client.rotateByYawRateAsync(30, rad/30)
+        return self.client.rotateByYawRateAsync(-30, rad/30)
 
     def land(self):
         """安全降落"""
