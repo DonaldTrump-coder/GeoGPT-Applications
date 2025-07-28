@@ -46,7 +46,7 @@ class DroneController:
                 airsim.ImageRequest("right", airsim.ImageType.Scene)
             ]
         )
-        image_names=[save_name+"_front.png",save_name+"_down.png",save_name+"_top.png",save_name+"_left.png",save_name+"_right.png"]
+        image_names=[save_name+"_front.png",save_name+"_down.png",save_name+"_back.png",save_name+"_left.png",save_name+"_right.png"]
         save_dir=save_dir+"\\"
         for i, response in enumerate(responses):
             if response.width == 0:
