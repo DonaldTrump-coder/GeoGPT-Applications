@@ -3,12 +3,50 @@ from PyQt5 import QtWidgets,QtGui,QtCore
 class MultiMediaDisplay(QtWidgets.QWidget):
     def __init__(self, parent = None):
         super().__init__(parent)
-        self.videodisplay=QtWidgets.QLabel("第三人称视频展示")
+
+        self.container=QtWidgets.QWidget()
+        self.container.setFixedSize(900, 750)
+        self.container.setStyleSheet("background-color: black;")
+
+        #实时视频展示框
+        self.videodisplay=QtWidgets.QLabel("第三人称视频展示",self.container)
         self.videodisplay.setFixedSize(900,750)
-        self.videodisplay.setStyleSheet("background-color: black;")
-        self.layout=QtWidgets.QVBoxLayout(self)
-        self.layout.addWidget(self.videodisplay)
-        self.layout.setContentsMargins(2,2,2,2)
+        self.videodisplay.setAlignment(QtCore.Qt.AlignCenter)
+        self.videodisplay.setStyleSheet("color: black;background-color: black;")
+        layout=QtWidgets.QVBoxLayout(self)
+        layout.setContentsMargins(2,2,2,2)
+
+        #图像展示框
+        self.image1=QtWidgets.QLabel("前视", self.container)
+        self.image1.setFixedSize(280, 160)
+        self.image1.move(10,580)
+        self.image1.setStyleSheet("background-color: white; color: white;")
+        self.image1.setAlignment(QtCore.Qt.AlignCenter)
+
+        self.image2=QtWidgets.QLabel("后视", self.container)
+        self.image2.setFixedSize(280, 160)
+        self.image2.move(610,580)
+        self.image2.setStyleSheet("background-color: white; color: white;")
+        self.image2.setAlignment(QtCore.Qt.AlignCenter)
+
+        self.image3=QtWidgets.QLabel("左视")
+        self.image4=QtWidgets.QLabel("俯视")
+        self.image5=QtWidgets.QLabel("右视")
+        for label in [self.image3, self.image4, self.image5]:
+            label.setFixedSize(280, 160)
+            label.setAlignment(QtCore.Qt.AlignCenter)
+            label.setStyleSheet("background-color: #222; color: white; border: 1px solid #555;")
+
+        image_row_layout = QtWidgets.QHBoxLayout()
+        image_row_layout.setSpacing(10)
+        image_row_layout.addWidget(self.image3)
+        image_row_layout.addWidget(self.image4)
+        image_row_layout.addWidget(self.image5)
+
+        layout.addWidget(self.container)
+        layout.addLayout(image_row_layout)
+        layout.setContentsMargins(5, 5, 5, 5)
+        layout.setSpacing(10)
 
 #聊天区域
 class ChatDisplay(QtWidgets.QWidget):
@@ -42,9 +80,6 @@ class MessageDisplay(QtWidgets.QScrollArea):
         self.setWidgetResizable(True)
         self.setWidget(container)
 
-        self.add_message("你好，欢迎来到聊天室！")
-        self.add_message("你好，我是用户！")
-
     #添加聊天信息（聊天文本以及是否为用户）
     def add_message(self,text,user):
         message=OneMessage(text,user)
@@ -65,12 +100,12 @@ class OneMessage(QtWidgets.QWidget):
         text_label.setWordWrap(True)
         
 
-        if user is "VLM":
+        if user == "VLM":
             layout.addStretch()
             layout.addWidget(text_label)
             layout.addWidget(avatar_label)
 
-        elif user is "GeoGPT":
+        elif user == "GeoGPT":
             layout.addWidget(avatar_label)
             layout.addWidget(text_label)
             layout.addStretch()

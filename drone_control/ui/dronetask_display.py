@@ -80,3 +80,7 @@ class Drone_Window(QtWidgets.QMainWindow,Drone_Ui):
         else:
             self.showMaximized()
             self.title_bar.btn_max_restore.setIcon(QtGui.QIcon("icons/restore-down.png"))
+
+    #向聊天框中添加消息
+    def add_message(self,text,user):
+        self.content.chat.messagedisplay.add_message(text,user)
