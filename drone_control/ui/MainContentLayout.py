@@ -42,6 +42,46 @@ class MessageDisplay(QtWidgets.QScrollArea):
         self.setWidgetResizable(True)
         self.setWidget(container)
 
+        self.add_message("你好，欢迎来到聊天室！")
+        self.add_message("你好，我是用户！")
+
+    #添加聊天信息（聊天文本以及是否为用户）
+    def add_message(self,text,user):
+        message=OneMessage(text,user)
+        self.message_area.addWidget(message)
+
+#消息组件（头像+信息内容）
+class OneMessage(QtWidgets.QWidget):
+    def __init__(self, text, user,parent = None):
+        super().__init__(parent)
+        layout=QtWidgets.QHBoxLayout()
+        layout.setContentsMargins(5,5,5,5)
+        layout.setSpacing(10)
+
+        avatar_label = QtWidgets.QLabel()
+        avatar_label.setPixmap(QtGui.QPixmap("icons/artificial-intelligence.png").scaled(40, 40, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation))
+
+        text_label = QtWidgets.QLabel(text)
+        text_label.setWordWrap(True)
+        
+
+        if user is "VLM":
+            layout.addStretch()
+            layout.addWidget(text_label)
+            layout.addWidget(avatar_label)
+
+        elif user is "GeoGPT":
+            layout.addWidget(avatar_label)
+            layout.addWidget(text_label)
+            layout.addStretch()
+
+        else:
+            layout.addStretch()
+            layout.addWidget(text_label)
+            layout.addWidget(avatar_label)
+
+        self.setLayout(layout)
+
 class MainContentLayout(QtWidgets.QWidget):
     def __init__(self, parent = None):
         super().__init__(parent)
