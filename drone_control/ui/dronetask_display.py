@@ -48,7 +48,7 @@ class Drone_Ui(object):
         Form.setWindowTitle(_translate("Form", "Form"))
 
 class Drone_Window(QtWidgets.QMainWindow,Drone_Ui):
-    def __init__(self):
+    def __init__(self, url):
         super().__init__()
         self.setupUi(self)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
@@ -68,7 +68,7 @@ class Drone_Window(QtWidgets.QMainWindow,Drone_Ui):
         self.title_bar.btn_close.clicked.connect(self.close)
         self.title_bar.layout.addWidget(self.title_bar.btn_close)
 
-        self.content = MainContentLayout()
+        self.content = MainContentLayout(url)
         layout.addWidget(self.content)
 
         self.setCentralWidget(central_widget)

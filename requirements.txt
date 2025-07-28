@@ -7,3 +7,4 @@ numpy
 msgpack-rpc-python
 airsim
 PyQt5
+PyQtWebEngine

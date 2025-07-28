@@ -6,6 +6,8 @@ from PyQt5 import QtWidgets,QtCore
 import sys
 from ui.dronetask_display import Drone_Window
 
+stream_url=""
+
 #创建一个新线程，用来执行无人机任务（和UI分开）
 class DroneTaskThread(QtCore.QThread):
     log_signal = QtCore.pyqtSignal(str)
@@ -64,7 +66,7 @@ def main():
     os.makedirs("captures", exist_ok=True)
 
     app=QtWidgets.QApplication(sys.argv)
-    window=Drone_Window()
+    window=Drone_Window(url=stream_url)
     window.show()
 
     drone_task_thread=DroneTaskThread(drone,analyzer)

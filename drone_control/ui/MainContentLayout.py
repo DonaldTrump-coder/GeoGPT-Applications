@@ -1,7 +1,7 @@
-from PyQt5 import QtWidgets,QtGui,QtCore
+from PyQt5 import QtWidgets,QtGui,QtCore,QtWebEngineWidgets
 
 class MultiMediaDisplay(QtWidgets.QWidget):
-    def __init__(self, parent = None):
+    def __init__(self, url, parent = None):
         super().__init__(parent)
 
         self.container=QtWidgets.QWidget()
@@ -9,10 +9,15 @@ class MultiMediaDisplay(QtWidgets.QWidget):
         self.container.setStyleSheet("background-color: black;")
 
         #实时视频展示框
-        self.videodisplay=QtWidgets.QLabel("第三人称视频展示",self.container)
+        self.videodisplay=QtWidgets.QWidget(self.container)
         self.videodisplay.setFixedSize(900,750)
-        self.videodisplay.setAlignment(QtCore.Qt.AlignCenter)
         self.videodisplay.setStyleSheet("color: black;background-color: black;")
+        self.webview=QtWebEngineWidgets.QWebEngineView(self.videodisplay)
+        self.webview.setUrl(QtCore.QUrl(url))
+        weblayout=QtWidgets.QVBoxLayout(self.videodisplay)
+        weblayout.setContentsMargins(0,0,0,0)
+        weblayout.addWidget(self.webview)
+
         layout=QtWidgets.QVBoxLayout(self)
         layout.setContentsMargins(2,2,2,2)
 
@@ -118,9 +123,9 @@ class OneMessage(QtWidgets.QWidget):
         self.setLayout(layout)
 
 class MainContentLayout(QtWidgets.QWidget):
-    def __init__(self, parent = None):
+    def __init__(self, url, parent = None):
         super().__init__(parent)
-        self.video_and_images=MultiMediaDisplay()
+        self.video_and_images=MultiMediaDisplay(url)
         self.chat=ChatDisplay()
 
         main_layout=QtWidgets.QHBoxLayout(self)
