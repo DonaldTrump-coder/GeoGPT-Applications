@@ -23,6 +23,8 @@ class DroneTaskThread(QtCore.QThread):
             self.log_signal.emit("【任务开始】无人机起飞...")
             self.drone.takeoff(altitude=15)
 
+            self.drone.turn_left(90)
+
             print("开始拍摄照片")
             path="captures"
             img_path=self.drone.capture_images(path,"scene")
