@@ -9,12 +9,16 @@ from ui.dronetask_display import Drone_Window
 stream_url="http://127.0.0.1"
 os.environ['QTWEBENGINE_CHROMIUM_FLAGS'] = '--enable-gpu-rasterization --ignore-gpu-blacklist --enable-zero-copy'
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseOpenGLES)
+#利用GPU，进行推流渲染的加速
 
 #创建一个新线程，用来执行无人机任务（和UI分开）
 class DroneTaskThread(QtCore.QThread):
     log_signal = QtCore.pyqtSignal(str)
     finished_signal = QtCore.pyqtSignal()
-    captured_signal=QtCore.pyqtSignal(str)
+    captured_signal=QtCore.pyqtSignal(str)#拍摄照片后执行的信号
+
+    #规定传输消息的格式：["发送者","消息内容"]
+    message_signal=QtCore.pyqtSignal(list)#传输消息后执行的信号
 
     def __init__(self, drone:DroneController, analyzer:Agent_Processor,parent=None):
         super().__init__(parent)
@@ -22,33 +26,28 @@ class DroneTaskThread(QtCore.QThread):
         self.analyzer=analyzer
 
     def run(self):
-        try:
         # 任务执行
-            print("【任务开始】无人机起飞...")
-            self.log_signal.emit("【任务开始】无人机起飞...")
-            self.drone.takeoff(altitude=15)
+        print("【任务开始】无人机起飞...")
+        self.log_signal.emit("【任务开始】无人机起飞...")
+        self.drone.takeoff(altitude=15)
+        self.drone.get_drone_state()
+        self.analyzer.get_drone_state_prompts(self.drone.x,self.drone.y,self.drone.z)
 
-            self.drone.turn_left(90)
+        self.analyzer.add_messages('user',self.analyzer.GeoGPT_prompts+self.analyzer.control_prompts+self.analyzer.state_prompts)
+        self.stop=False
 
-            print("开始拍摄照片")
-            path="captures"
-            img_path=self.drone.capture_images(path,"scene")
-            self.captured_signal.emit(img_path)
+        #while(self.stop is False):
+        self.actions=self.analyzer.post_large_language_model()
+        print(self.actions)
 
-            question = "请详细描述当前场景中可见的主要物体、它们的颜色和空间分布关系"
-            print(f"\n【场景分析结果】")
-            analysis = self.analyzer.analyze_scene(img_path+"_front.png", question)
-            print(analysis)
+        print("\n【任务完成】无人机降落...")
+        self.log_signal.emit("\n【任务完成】无人机降落...")
+        self.drone.land()
 
-            self.drone.go_back()
-
-        except Exception as e:
-            print(f"\n【任务执行错误】{str(e)}")
-            self.log_signal.emit(f"\n【任务执行错误】{str(e)}")
-        finally:
-            print("\n【任务完成】无人机降落...")
-            self.log_signal.emit("\n【任务完成】无人机降落...")
-            self.drone.land()
+    #解析模型输出，并直接执行模型指令
+    def analyze_action(self, action:dict, image_processor):
+        if list(action.keys())[0]=='turn left':
+            self.turn_left(action['turn left'])
 
 # 主任务流程
 def main():
@@ -76,6 +75,7 @@ def main():
 
     drone_task_thread=DroneTaskThread(drone,analyzer)
     drone_task_thread.captured_signal.connect(window.show_captured_image)
+    drone_task_thread.message_signal.connect(window)
 
     drone_task_thread.start()
 

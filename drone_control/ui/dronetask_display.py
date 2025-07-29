@@ -87,3 +87,7 @@ class Drone_Window(QtWidgets.QMainWindow,Drone_Ui):
 
     def show_captured_image(self,img_path):
         self.content.video_and_images.show_captured_image(img_path=img_path)
+
+    #发送消息的槽函数，用来向聊天框中添加消息
+    def send_message(self,message:list):
+        self.add_message(message[1],message[0])
