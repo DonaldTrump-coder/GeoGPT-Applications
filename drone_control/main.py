@@ -41,6 +41,7 @@ class DroneTaskThread(QtCore.QThread):
 
         #while(self.stop is False):
         self.actions=self.analyzer.post_large_language_model()
+        print(self.actions)
         self.actions=extract_last_json_dict(self.actions)
         print(self.actions)
 
@@ -56,8 +57,24 @@ class DroneTaskThread(QtCore.QThread):
     def analyze_action(self, action:dict):
         if list(action.keys())[0]=='turn left':
             self.drone.turn_left(action['turn left'])
+            self.analyzer.descriptions=""
         elif list(action.keys())[0]=='turn right':
             self.drone.turn_right(action['turn right'])
+            self.analyzer.descriptions=""
+        elif list(action.keys())[0]=='move forward':
+            self.drone.move_forward(action['move forward'])
+            self.analyzer.descriptions=""
+        elif list(action.keys())[0]=='move backward':
+            self.drone.move_backward(action['move backward'])
+            self.analyzer.descriptions=""
+        elif list(action.keys())[0]=='get image':
+            img_path=self.drone.capture_images("captures",self.drone.capture_times)
+            self.drone.capture_times+=1
+            self.captured_signal.emit(img_path)
+            img_name=img_path+"_"+action["get image"]+".png"
+            self.analyzer.descriptions=self.analyzer.get_descriptions(img_name)
+        elif list(action.keys())[0]=='land':
+            self.stop=True
 
 # 主任务流程
 def main():

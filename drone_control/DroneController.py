@@ -9,6 +9,7 @@ class DroneController:
         self.client.enableApiControl(True)
         self.client.armDisarm(True)
         self.get_drone_state()
+        self.capture_times=0
 
     #获取无人机此时的坐标
     def get_drone_state(self):
@@ -73,7 +74,7 @@ class DroneController:
     def move_forward(self,s):#向前移动指定距离
         return self.client.moveByVelocityBodyFrameAsync(vx=s/5, vy=0, vz=0, duration=5).join()
     
-    def move_forward(self,s):#向后移动指定距离
+    def move_backward(self,s):#向后移动指定距离
         return self.client.moveByVelocityBodyFrameAsync(vx=-s/5, vy=0, vz=0, duration=5).join()
 
     def land(self):
