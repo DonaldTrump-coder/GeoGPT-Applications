@@ -7,19 +7,19 @@
         "VehicleType": "SimpleFlight",
         "Cameras": {
             "front": {
-                "X": 0, "Y": 0, "Z": 1, "Pitch": 0, "Roll": 0, "Yaw": 0,
+                "X": 0, "Y": 0, "Z": 1, "Pitch": 0, "Roll": 0, "Yaw": 180,
                 "CaptureSettings": [
                     {
                     "ImageType": 0,
-                    "Width": 480,
-                    "Height": 360,
+                    "Width": 640,
+                    "Height": 480,
                     "FOV_Degrees": 90,
                     "AutoExposureSpeed": 100,
-                    "AutoExposureBias": 2.0,
-                    "AutoExposureMaxBrightness": 1.0,
-                    "AutoExposureMinBrightness": 0.05,
+                    "AutoExposureBias": 3.0,
+                    "AutoExposureMaxBrightness": 4.0,
+                    "AutoExposureMinBrightness": 2.5,
                     "MotionBlurAmount": 0,
-                    "TargetGamma": 1.0,
+                    "TargetGamma": 4.0,
                     "ProjectionMode": "",
                     "OrthoWidth": 5.12
                     }
@@ -28,77 +28,77 @@
             "down": {
                 "X": 0, "Y": 0, "Z": 1, "Pitch": -90, "Roll": 0, "Yaw": 0,
                 "CaptureSettings": [
-                    {
+                  {
                     "ImageType": 0,
-                    "Width": 480,
-                    "Height": 360,
+                    "Width": 640,
+                    "Height": 480,
                     "FOV_Degrees": 90,
                     "AutoExposureSpeed": 100,
-                    "AutoExposureBias": 2.0,
-                    "AutoExposureMaxBrightness": 1.0,
-                    "AutoExposureMinBrightness": 0.05,
+                    "AutoExposureBias": 3.0,
+                    "AutoExposureMaxBrightness": 4.0,
+                    "AutoExposureMinBrightness": 2.5,
                     "MotionBlurAmount": 0,
-                    "TargetGamma": 1.0,
+                    "TargetGamma": 4.0,
                     "ProjectionMode": "",
                     "OrthoWidth": 5.12
-                    }
+                  }
                 ]
             },
             "back": {
-                "X": 0, "Y": 0, "Z": 1, "Pitch": 0, "Roll": 0, "Yaw": 180,
+                "X": 0, "Y": 0, "Z": 1, "Pitch": 0, "Roll": 0, "Yaw": 0,
                 "CaptureSettings": [
-                    {
+                  {
                     "ImageType": 0,
-                    "Width": 480,
-                    "Height": 360,
+                    "Width": 640,
+                    "Height": 480,
                     "FOV_Degrees": 90,
                     "AutoExposureSpeed": 100,
-                    "AutoExposureBias": 2.0,
-                    "AutoExposureMaxBrightness": 1.0,
-                    "AutoExposureMinBrightness": 0.05,
+                    "AutoExposureBias": 3.0,
+                    "AutoExposureMaxBrightness": 4.0,
+                    "AutoExposureMinBrightness": 2.5,
                     "MotionBlurAmount": 0,
-                    "TargetGamma": 1.0,
+                    "TargetGamma": 4.0,
                     "ProjectionMode": "",
                     "OrthoWidth": 5.12
-                    }
+                  }
                 ]
             },
             "left": {
-                "X": 0, "Y": 0, "Z": 1, "Pitch": 0, "Roll": 0, "Yaw": -90,
+                "X": 0, "Y": 0, "Z": 1, "Pitch": 0, "Roll": 0, "Yaw": 90,
                 "CaptureSettings": [
-                    {
+                  {
                     "ImageType": 0,
-                    "Width": 480,
-                    "Height": 360,
+                    "Width": 640,
+                    "Height": 480,
                     "FOV_Degrees": 90,
                     "AutoExposureSpeed": 100,
-                    "AutoExposureBias": 2.0,
-                    "AutoExposureMaxBrightness": 1.0,
-                    "AutoExposureMinBrightness": 0.05,
+                    "AutoExposureBias": 3.0,
+                    "AutoExposureMaxBrightness": 4.0,
+                    "AutoExposureMinBrightness": 2.5,
                     "MotionBlurAmount": 0,
-                    "TargetGamma": 1.0,
+                    "TargetGamma": 4.0,
                     "ProjectionMode": "",
                     "OrthoWidth": 5.12
-                    }
+                  }
                 ]
             },
             "right": {
-                "X": 0, "Y": 0, "Z": 1, "Pitch": 0, "Roll": 0, "Yaw": 90,
+                "X": 0, "Y": 0, "Z": 1, "Pitch": 0, "Roll": 0, "Yaw": -90,
                 "CaptureSettings": [
-                    {
+                  {
                     "ImageType": 0,
-                    "Width": 480,
-                    "Height": 360,
+                    "Width": 640,
+                    "Height": 480,
                     "FOV_Degrees": 90,
                     "AutoExposureSpeed": 100,
-                    "AutoExposureBias": 2.0,
-                    "AutoExposureMaxBrightness": 1.0,
-                    "AutoExposureMinBrightness": 0.05,
+                    "AutoExposureBias": 3.0,
+                    "AutoExposureMaxBrightness": 4.0,
+                    "AutoExposureMinBrightness": 2.5,
                     "MotionBlurAmount": 0,
-                    "TargetGamma": 1.0,
+                    "TargetGamma": 4.0,
                     "ProjectionMode": "",
                     "OrthoWidth": 5.12
-                    }
+                  }
                 ]
             }
         }

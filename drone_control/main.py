@@ -18,6 +18,7 @@ class DroneTaskThread(QtCore.QThread):
     log_signal = QtCore.pyqtSignal(str)
     finished_signal = QtCore.pyqtSignal()
     captured_signal=QtCore.pyqtSignal(str)#拍摄照片后执行的信号
+    assist_signal=QtCore.pyqtSignal(str)
 
     #规定传输消息的格式：["发送者","消息内容"]
     message_signal=QtCore.pyqtSignal(list)#传输消息后执行的信号
@@ -26,6 +27,10 @@ class DroneTaskThread(QtCore.QThread):
         super().__init__(parent)
         self.drone=drone
         self.analyzer=analyzer
+        self.assist=False
+        self.loop=None
+        self.assist_result=None#修改过后的描述（界面输出的）
+        self.assist_signal.connect(self.handle_assist)
 
     def run(self):
         # 任务执行
@@ -54,6 +59,11 @@ class DroneTaskThread(QtCore.QThread):
         self.message_signal.emit(['GeoGPT','任务完成，无人机降落'])
         self.drone.land()
 
+    def handle_assist(self,text):
+        self.assist_result=text
+        if self.loop is not None:
+            self.loop.quit()
+
     #解析模型输出，并直接执行模型指令
     def analyze_action(self, action:dict):
         if action is None:#默认拍摄前方照片
@@ -62,6 +72,10 @@ class DroneTaskThread(QtCore.QThread):
             self.captured_signal.emit(img_path)
             img_name=img_path+"_front.png"
             self.analyzer.descriptions=self.analyzer.get_descriptions(img_name)
+            if self.assist is True:
+                self.loop=QtCore.QEventLoop()
+                self.loop.exec_()
+                self.analyzer.descriptions=self.assist_result
             self.message_signal.emit(['VLM',"The front image description is: "+self.analyzer.descriptions])
             self.analyzer.add_messages('assistant',json.dumps(action))
             self.drone.get_drone_state()
