@@ -91,3 +91,7 @@ class Drone_Window(QtWidgets.QMainWindow,Drone_Ui):
     #发送消息的槽函数，用来向聊天框中添加消息
     def send_message(self,message:list):
         self.add_message(message[1],message[0])
+
+    #向编辑框中发送文本描述
+    def send_descriptions(self,text:str):
+        pass

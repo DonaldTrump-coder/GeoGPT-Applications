@@ -19,6 +19,7 @@ class DroneTaskThread(QtCore.QThread):
     finished_signal = QtCore.pyqtSignal()
     captured_signal=QtCore.pyqtSignal(str)#拍摄照片后执行的信号
     assist_signal=QtCore.pyqtSignal(str)
+    send_description=QtCore.pyqtSignal(str)#向界面发送描述文本
 
     #规定传输消息的格式：["发送者","消息内容"]
     message_signal=QtCore.pyqtSignal(list)#传输消息后执行的信号
@@ -129,6 +130,10 @@ class DroneTaskThread(QtCore.QThread):
             self.captured_signal.emit(img_path)
             img_name=img_path+"_"+action["get image"]+".png"
             self.analyzer.descriptions=self.analyzer.get_descriptions(img_name)
+            if self.assist is True:
+                self.loop=QtCore.QEventLoop()
+                self.loop.exec_()
+                self.analyzer.descriptions=self.assist_result
             self.message_signal.emit(['VLM',"The"+action["get image"]+"image description is: "+self.analyzer.descriptions])
             self.analyzer.add_messages('assistant',json.dumps(action))
             self.drone.get_drone_state()

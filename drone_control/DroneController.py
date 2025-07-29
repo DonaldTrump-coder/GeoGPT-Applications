@@ -19,12 +19,6 @@ class DroneController:
         self.object_UE_position_y=66
         self.object_UE_position_z=0
 
-        self.client.simSetCameraExposureSettings("front", 0, enable_manual=False, exposure_compensation=3.0)
-        self.client.simSetCameraExposureSettings("back", 0, enable_manual=False, exposure_compensation=3.0)
-        self.client.simSetCameraExposureSettings("down", 0, enable_manual=False, exposure_compensation=3.0)
-        self.client.simSetCameraExposureSettings("left", 0, enable_manual=False, exposure_compensation=3.0)
-        self.client.simSetCameraExposureSettings("right", 0, enable_manual=False, exposure_compensation=3.0)
-
     #获取无人机此时的坐标
     def get_drone_state(self):
         pose=self.client.simGetVehiclePose(vehicle_name="SimpleFlight")
