@@ -28,6 +28,7 @@ class Agent_Processor:
         self.geogpt_model=geogpt_module
 
         self.messages=[]
+        self.init_prompts()
 
     def init_prompts(self):
         #用视觉语言模型描述图像的提示词
