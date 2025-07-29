@@ -39,15 +39,14 @@ class DroneTaskThread(QtCore.QThread):
         self.analyzer.add_messages('assistant','{ "take off": 15 }')
         self.stop=False
 
-        #while(self.stop is False):
-        self.actions=self.analyzer.post_large_language_model()
-        print(self.actions)
-        self.actions=extract_last_json_dict(self.actions)
-        print(self.actions)
-
-        self.message_signal.emit(['VLM','received'])
-        time.sleep(5)
-        self.message_signal.emit(['VLM','你好'])
+        while(self.stop is False):
+            self.actions=self.analyzer.post_large_language_model()
+            self.action=extract_last_json_dict(self.actions)
+            self.analyze_action(self.action)
+            print(self.actions)
+            self.message_signal.emit(['VLM','received'])
+            time.sleep(5)
+            self.message_signal.emit(['VLM','你好'])
 
         print("\n【任务完成】无人机降落...")
         self.log_signal.emit("\n【任务完成】无人机降落...")
@@ -58,21 +57,37 @@ class DroneTaskThread(QtCore.QThread):
         if list(action.keys())[0]=='turn left':
             self.drone.turn_left(action['turn left'])
             self.analyzer.add_messages('assistant',json.dumps(action))
+            self.drone.get_drone_state()
+            self.analyzer.get_drone_state_prompts(self.drone.x,self.drone.y,self.drone.z)
+            self.analyzer.add_messages('user',self.analyzer.state_prompts+"Please output an action.")
         elif list(action.keys())[0]=='turn right':
             self.drone.turn_right(action['turn right'])
             self.analyzer.add_messages('assistant',json.dumps(action))
+            self.drone.get_drone_state()
+            self.analyzer.get_drone_state_prompts(self.drone.x,self.drone.y,self.drone.z)
+            self.analyzer.add_messages('user',self.analyzer.state_prompts+"Please output an action.")
         elif list(action.keys())[0]=='move forward':
             self.drone.move_forward(action['move forward'])
             self.analyzer.add_messages('assistant',json.dumps(action))
+            self.drone.get_drone_state()
+            self.analyzer.get_drone_state_prompts(self.drone.x,self.drone.y,self.drone.z)
+            self.analyzer.add_messages('user',self.analyzer.state_prompts+"Please output an action.")
         elif list(action.keys())[0]=='move backward':
             self.drone.move_backward(action['move backward'])
             self.analyzer.add_messages('assistant',json.dumps(action))
+            self.drone.get_drone_state()
+            self.analyzer.get_drone_state_prompts(self.drone.x,self.drone.y,self.drone.z)
+            self.analyzer.add_messages('user',self.analyzer.state_prompts+"Please output an action.")
         elif list(action.keys())[0]=='get image':
             img_path=self.drone.capture_images("captures",self.drone.capture_times)
             self.drone.capture_times+=1
             self.captured_signal.emit(img_path)
             img_name=img_path+"_"+action["get image"]+".png"
             self.analyzer.descriptions=self.analyzer.get_descriptions(img_name)
+            self.analyzer.add_messages('assistant',json.dumps(action))
+            self.drone.get_drone_state()
+            self.analyzer.get_drone_state_prompts(self.drone.x,self.drone.y,self.drone.z)
+            self.analyzer.add_messages('user',"The image description is: "+self.analyzer.descriptions+self.analyzer.state_prompts+"Please output an action.")
         elif list(action.keys())[0]=='land':
             self.stop=True
 
