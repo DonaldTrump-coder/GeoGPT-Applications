@@ -6,6 +6,7 @@ from PyQt5 import QtWidgets,QtCore
 import sys
 from ui.dronetask_display import Drone_Window
 from utils.text_tools import extract_last_json_dict
+import json
 
 stream_url="http://127.0.0.1"
 os.environ['QTWEBENGINE_CHROMIUM_FLAGS'] = '--enable-gpu-rasterization --ignore-gpu-blacklist --enable-zero-copy'
@@ -56,16 +57,16 @@ class DroneTaskThread(QtCore.QThread):
     def analyze_action(self, action:dict):
         if list(action.keys())[0]=='turn left':
             self.drone.turn_left(action['turn left'])
-            self.analyzer.descriptions=""
+            self.analyzer.add_messages('assistant',json.dumps(action))
         elif list(action.keys())[0]=='turn right':
             self.drone.turn_right(action['turn right'])
-            self.analyzer.descriptions=""
+            self.analyzer.add_messages('assistant',json.dumps(action))
         elif list(action.keys())[0]=='move forward':
             self.drone.move_forward(action['move forward'])
-            self.analyzer.descriptions=""
+            self.analyzer.add_messages('assistant',json.dumps(action))
         elif list(action.keys())[0]=='move backward':
             self.drone.move_backward(action['move backward'])
-            self.analyzer.descriptions=""
+            self.analyzer.add_messages('assistant',json.dumps(action))
         elif list(action.keys())[0]=='get image':
             img_path=self.drone.capture_images("captures",self.drone.capture_times)
             self.drone.capture_times+=1
