@@ -40,6 +40,10 @@ class DroneTaskThread(QtCore.QThread):
         self.actions=self.analyzer.post_large_language_model()
         print(self.actions)
 
+        self.message_signal.emit(['VLM','received'])
+        time.sleep(5)
+        self.message_signal.emit(['VLM','你好'])
+
         print("\n【任务完成】无人机降落...")
         self.log_signal.emit("\n【任务完成】无人机降落...")
         self.drone.land()
