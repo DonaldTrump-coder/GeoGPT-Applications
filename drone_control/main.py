@@ -30,7 +30,7 @@ class DroneTaskThread(QtCore.QThread):
     def run(self):
         # 任务执行
         print("【任务开始】无人机起飞...")
-        self.log_signal.emit("【任务开始】无人机起飞...")
+        self.message_signal.emit(['GeoGPT','任务开始，无人机起飞'])
         self.drone.takeoff(altitude=15)
         self.drone.get_drone_state()
         self.analyzer.get_drone_state_prompts(self.drone.x,self.drone.y,self.drone.z)
@@ -60,24 +60,28 @@ class DroneTaskThread(QtCore.QThread):
             self.drone.get_drone_state()
             self.analyzer.get_drone_state_prompts(self.drone.x,self.drone.y,self.drone.z)
             self.analyzer.add_messages('user',self.analyzer.state_prompts+"Please output an action.")
+            self.message_signal.emit(['GeoGPT',f"Turn left {action['turn left']}°"])
         elif list(action.keys())[0]=='turn right':
             self.drone.turn_right(action['turn right'])
             self.analyzer.add_messages('assistant',json.dumps(action))
             self.drone.get_drone_state()
             self.analyzer.get_drone_state_prompts(self.drone.x,self.drone.y,self.drone.z)
             self.analyzer.add_messages('user',self.analyzer.state_prompts+"Please output an action.")
+            self.message_signal.emit(['GeoGPT',f"Turn right {action['turn right']}°"])
         elif list(action.keys())[0]=='move forward':
             self.drone.move_forward(action['move forward'])
             self.analyzer.add_messages('assistant',json.dumps(action))
             self.drone.get_drone_state()
             self.analyzer.get_drone_state_prompts(self.drone.x,self.drone.y,self.drone.z)
             self.analyzer.add_messages('user',self.analyzer.state_prompts+"Please output an action.")
+            self.message_signal.emit(['GeoGPT',f"Move forward {action['move forward']}m"])
         elif list(action.keys())[0]=='move backward':
             self.drone.move_backward(action['move backward'])
             self.analyzer.add_messages('assistant',json.dumps(action))
             self.drone.get_drone_state()
             self.analyzer.get_drone_state_prompts(self.drone.x,self.drone.y,self.drone.z)
             self.analyzer.add_messages('user',self.analyzer.state_prompts+"Please output an action.")
+            self.message_signal.emit(['GeoGPT',f"Move backward {action['move backward']}m"])
         elif list(action.keys())[0]=='get image':
             img_path=self.drone.capture_images("captures",f"{self.drone.capture_times}")
             self.drone.capture_times+=1
@@ -90,6 +94,7 @@ class DroneTaskThread(QtCore.QThread):
             self.analyzer.add_messages('user',"The image description is: "+self.analyzer.descriptions+self.analyzer.state_prompts+"Please output an action.")
         elif list(action.keys())[0]=='land':
             self.stop=True
+            self.message_signal.emit(['GeoGPT',"Land"])
 
 # 主任务流程
 def main():

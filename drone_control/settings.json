@@ -14,9 +14,9 @@
                     "Width": 640,
                     "Height": 480,
                     "FOV_Degrees": 90,
-                    "AutoExposureSpeed": 100,
+                    "AutoExposureSpeed": 5,
                     "AutoExposureBias": 1,
-                    "ExposureCompensation": 2.0,
+                    "ExposureCompensation": 5.0,
                     "ExposureManual": 0.2,
                     "EnableAutoExposure": true
                     }
@@ -30,9 +30,9 @@
                     "Width": 640,
                     "Height": 480,
                     "FOV_Degrees": 90,
-                    "AutoExposureSpeed": 100,
+                    "AutoExposureSpeed": 5,
                     "AutoExposureBias": 1,
-                    "ExposureCompensation": 2.0,
+                    "ExposureCompensation": 5.0,
                     "ExposureManual": 0.2,
                     "EnableAutoExposure": true
                     }
@@ -46,9 +46,9 @@
                     "Width": 640,
                     "Height": 480,
                     "FOV_Degrees": 90,
-                    "AutoExposureSpeed": 100,
+                    "AutoExposureSpeed": 5,
                     "AutoExposureBias": 1,
-                    "ExposureCompensation": 2.0,
+                    "ExposureCompensation": 5.0,
                     "ExposureManual": 0.2,
                     "EnableAutoExposure": true
                     }
@@ -62,9 +62,9 @@
                     "Width": 640,
                     "Height": 480,
                     "FOV_Degrees": 90,
-                    "AutoExposureSpeed": 100,
+                    "AutoExposureSpeed": 5,
                     "AutoExposureBias": 1,
-                    "ExposureCompensation": 2.0,
+                    "ExposureCompensation": 5.0,
                     "ExposureManual": 0.2,
                     "EnableAutoExposure": true
                     }
@@ -78,9 +78,9 @@
                     "Width": 640,
                     "Height": 480,
                     "FOV_Degrees": 90,
-                    "AutoExposureSpeed": 100,
+                    "AutoExposureSpeed": 5,
                     "AutoExposureBias": 1,
-                    "ExposureCompensation": 2.0,
+                    "ExposureCompensation": 5.0,
                     "ExposureManual": 0.2,
                     "EnableAutoExposure": true
                     }
