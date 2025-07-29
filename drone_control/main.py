@@ -29,6 +29,13 @@ class DroneTaskThread(QtCore.QThread):
 
     def run(self):
         # 任务执行
+        self.analyzer.input_task_positions(starting_x=self.drone.starting_UE_position_x,
+                                           starting_y=self.drone.starting_UE_position_y,
+                                           starting_z=self.drone.starting_UE_position_z,
+                                           object_x=self.drone.object_UE_position_x,
+                                           object_y=self.drone.object_UE_position_y,
+                                           object_z=self.drone.object_UE_position_z
+                                           )
         self.message_signal.emit(['GeoGPT','任务开始，无人机起飞'])
         self.drone.takeoff(altitude=15)
         self.drone.get_drone_state()

@@ -118,6 +118,12 @@ class MessageDisplay(QtWidgets.QScrollArea):
     def add_message(self,text,user):
         message=OneMessage(text,user)
         self.message_area.addWidget(message)
+        QtCore.QTimer.singleShot(0, self.scroll_to_bottom)
+
+    #滚动到底部
+    def  scroll_to_bottom(self):
+        scroll_bar = self.verticalScrollBar()
+        scroll_bar.setValue(scroll_bar.maximum())
 
 #消息组件（头像+信息内容）
 class OneMessage(QtWidgets.QWidget):

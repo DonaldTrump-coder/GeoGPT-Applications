@@ -11,13 +11,21 @@ class DroneController:
         self.get_drone_state()
         self.capture_times=0
 
+        #无人机任务的坐标信息
+        self.starting_UE_position_x=0
+        self.starting_UE_position_y=0
+        self.starting_UE_position_z=0
+        self.object_UE_position_x=-1.5
+        self.object_UE_position_y=66
+        self.object_UE_position_z=0
+
     #获取无人机此时的坐标
     def get_drone_state(self):
         pose=self.client.simGetVehiclePose(vehicle_name="SimpleFlight")
         position=pose.position
         self.x=position.x_val
         self.y=position.y_val
-        self.z=position.z_val
+        self.z=-position.z_val
 
     def takeoff(self, altitude: float = 10):
         """起飞到指定高度（米）"""
