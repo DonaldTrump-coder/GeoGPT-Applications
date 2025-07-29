@@ -18,8 +18,8 @@ class DroneTaskThread(QtCore.QThread):
     log_signal = QtCore.pyqtSignal(str)
     finished_signal = QtCore.pyqtSignal()
     captured_signal=QtCore.pyqtSignal(str)#拍摄照片后执行的信号
-    assist_signal=QtCore.pyqtSignal(str)
-    send_description=QtCore.pyqtSignal(str)#向界面发送描述文本
+    assist_signal=QtCore.pyqtSignal(str)#获取修改后的描述文本信号
+    send_description_signal=QtCore.pyqtSignal(str)#向界面发送描述文本
 
     #规定传输消息的格式：["发送者","消息内容"]
     message_signal=QtCore.pyqtSignal(list)#传输消息后执行的信号
@@ -143,6 +143,12 @@ class DroneTaskThread(QtCore.QThread):
             self.stop=True
             self.message_signal.emit(['GeoGPT',"Land"])
 
+    def assist_change(self,checked:bool):
+        if checked:
+            self.assist=True
+        else:
+            self.assist=False
+
 # 主任务流程
 def main():
     # 初始化
@@ -170,6 +176,11 @@ def main():
     drone_task_thread=DroneTaskThread(drone,analyzer)
     drone_task_thread.captured_signal.connect(window.show_captured_image)
     drone_task_thread.message_signal.connect(window.send_message)
+    drone_task_thread.send_description_signal.connect(window.send_descriptions)
+    window.content.video_and_images.switch.toggled.connect(drone_task_thread.assist_change)
+
+    window.get_assist_signal(drone_task_thread.assist_signal)
+    #将获取修改后的描述文本信号送至界面
 
     drone_task_thread.start()
 

@@ -1,4 +1,5 @@
 from PyQt5 import QtWidgets,QtGui,QtCore,QtWebEngineWidgets
+from SlideSwitch import SlideSwitch
 
 class MultiMediaDisplay(QtWidgets.QWidget):
     def __init__(self, url, parent = None):
@@ -41,6 +42,12 @@ class MultiMediaDisplay(QtWidgets.QWidget):
             label.setFixedSize(280, 160)
             label.setAlignment(QtCore.Qt.AlignCenter)
             label.setStyleSheet("background-color: #222; color: white; border: 1px solid #555;")
+
+        self.switch=SlideSwitch(self.container)
+        self.switch.setGeometry(840, 0, 60, 30)
+        self.switch_label=QtWidgets.QLabel("辅助描述",self.container)
+        self.switch_label.setGeometry(760, 0, 60, 30)
+        self.switch_label.setStyleSheet("background:white;")
 
         image_row_layout = QtWidgets.QHBoxLayout()
         image_row_layout.setSpacing(10)
@@ -98,11 +105,14 @@ class ChatDisplay(QtWidgets.QWidget):
         self.input_layout.addWidget(self.input_box)
         self.input_layout.addWidget(self.send_button)
 
-        self.layout=QtWidgets.QVBoxLayout(self)
-        self.layout.addWidget(self.chatlabel)
-        self.layout.addWidget(self.messagedisplay)
-        self.layout.addLayout(self.input_layout)
-        self.layout.setContentsMargins(3,3,3,3)
+        layout=QtWidgets.QVBoxLayout(self)
+        layout.addWidget(self.chatlabel)
+        layout.addWidget(self.messagedisplay)
+        layout.addLayout(self.input_layout)
+        layout.setContentsMargins(3,3,3,3)
+
+    def send_descriptions(self,text):
+        self.input_box.setText(text)
 
 class MessageDisplay(QtWidgets.QScrollArea):
     def __init__(self, parent=None):
@@ -121,7 +131,7 @@ class MessageDisplay(QtWidgets.QScrollArea):
         QtCore.QTimer.singleShot(0, self.scroll_to_bottom)
 
     #滚动到底部
-    def  scroll_to_bottom(self):
+    def scroll_to_bottom(self):
         scroll_bar = self.verticalScrollBar()
         scroll_bar.setValue(scroll_bar.maximum())
 

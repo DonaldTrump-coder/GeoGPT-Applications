@@ -72,6 +72,7 @@ class Drone_Window(QtWidgets.QMainWindow,Drone_Ui):
         layout.addWidget(self.content)
 
         self.setCentralWidget(central_widget)
+        self.content.chat.send_button.clicked.connect(self.send_fixed_descriptions)
 
     def toggle_max_restore(self):
         if self.isMaximized():
@@ -94,4 +95,12 @@ class Drone_Window(QtWidgets.QMainWindow,Drone_Ui):
 
     #向编辑框中发送文本描述
     def send_descriptions(self,text:str):
-        pass
+        self.content.chat.send_descriptions(text)
+
+    def get_assist_signal(self,signal):
+        self.assist_signal=signal
+
+    def send_fixed_descriptions(self):
+        text=self.content.chat.input_box.toPlainText().strip()
+        if text:
+            self.assist_signal.emit(text)
