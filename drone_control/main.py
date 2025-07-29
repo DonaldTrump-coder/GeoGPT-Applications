@@ -79,7 +79,7 @@ class DroneTaskThread(QtCore.QThread):
             self.analyzer.get_drone_state_prompts(self.drone.x,self.drone.y,self.drone.z)
             self.analyzer.add_messages('user',self.analyzer.state_prompts+"Please output an action.")
         elif list(action.keys())[0]=='get image':
-            img_path=self.drone.capture_images("captures",self.drone.capture_times)
+            img_path=self.drone.capture_images("captures",f"{self.drone.capture_times}")
             self.drone.capture_times+=1
             self.captured_signal.emit(img_path)
             img_name=img_path+"_"+action["get image"]+".png"
