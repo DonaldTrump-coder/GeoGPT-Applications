@@ -110,7 +110,7 @@ class DroneTaskThread(QtCore.QThread):
             self.captured_signal.emit(img_path)
             img_name=img_path+"_"+action["get image"]+".png"
             self.analyzer.descriptions=self.analyzer.get_descriptions(img_name)
-            self.message_signal.emit(['VLM',f"The {action["get image"]} image description is: "+self.analyzer.descriptions])
+            self.message_signal.emit(['VLM',"The"+action["get image"]+"image description is: "+self.analyzer.descriptions])
             self.analyzer.add_messages('assistant',json.dumps(action))
             self.drone.get_drone_state()
             self.analyzer.get_drone_state_prompts(self.drone.x,self.drone.y,self.drone.z)
