@@ -44,9 +44,6 @@ class DroneTaskThread(QtCore.QThread):
             self.action=extract_last_json_dict(self.actions)
             self.analyze_action(self.action)
             print(self.actions)
-            self.message_signal.emit(['VLM','received'])
-            time.sleep(5)
-            self.message_signal.emit(['VLM','你好'])
 
         print("\n【任务完成】无人机降落...")
         self.message_signal.emit(['GeoGPT','任务完成，无人机降落'])
@@ -54,44 +51,70 @@ class DroneTaskThread(QtCore.QThread):
 
     #解析模型输出，并直接执行模型指令
     def analyze_action(self, action:dict):
-        if list(action.keys())[0]=='turn left':
+        if action is None:#默认拍摄前方照片
+            img_path=self.drone.capture_images("captures",f"{self.drone.capture_times}")
+            self.drone.capture_times+=1
+            self.captured_signal.emit(img_path)
+            img_name=img_path+"_front.png"
+            self.analyzer.descriptions=self.analyzer.get_descriptions(img_name)
+            self.message_signal.emit(['VLM',"The front image description is: "+self.analyzer.descriptions])
+            self.analyzer.add_messages('assistant',json.dumps(action))
+            self.drone.get_drone_state()
+            self.analyzer.get_drone_state_prompts(self.drone.x,self.drone.y,self.drone.z)
+            self.analyzer.add_messages('user',"The front image description is: "+self.analyzer.descriptions+self.analyzer.state_prompts+"Please output next action.")
+        elif list(action.keys())[0]=='turn left':
             self.drone.turn_left(action['turn left'])
             self.analyzer.add_messages('assistant',json.dumps(action))
             self.drone.get_drone_state()
             self.analyzer.get_drone_state_prompts(self.drone.x,self.drone.y,self.drone.z)
-            self.analyzer.add_messages('user',self.analyzer.state_prompts+"Please output an action.")
+            self.analyzer.add_messages('user',self.analyzer.state_prompts+"Please output next action.")
             self.message_signal.emit(['GeoGPT',f"Turn left {action['turn left']}°"])
         elif list(action.keys())[0]=='turn right':
             self.drone.turn_right(action['turn right'])
             self.analyzer.add_messages('assistant',json.dumps(action))
             self.drone.get_drone_state()
             self.analyzer.get_drone_state_prompts(self.drone.x,self.drone.y,self.drone.z)
-            self.analyzer.add_messages('user',self.analyzer.state_prompts+"Please output an action.")
+            self.analyzer.add_messages('user',self.analyzer.state_prompts+"Please output next action.")
             self.message_signal.emit(['GeoGPT',f"Turn right {action['turn right']}°"])
         elif list(action.keys())[0]=='move forward':
             self.drone.move_forward(action['move forward'])
             self.analyzer.add_messages('assistant',json.dumps(action))
             self.drone.get_drone_state()
             self.analyzer.get_drone_state_prompts(self.drone.x,self.drone.y,self.drone.z)
-            self.analyzer.add_messages('user',self.analyzer.state_prompts+"Please output an action.")
+            self.analyzer.add_messages('user',self.analyzer.state_prompts+"Please output next action.")
             self.message_signal.emit(['GeoGPT',f"Move forward {action['move forward']}m"])
         elif list(action.keys())[0]=='move backward':
             self.drone.move_backward(action['move backward'])
             self.analyzer.add_messages('assistant',json.dumps(action))
             self.drone.get_drone_state()
             self.analyzer.get_drone_state_prompts(self.drone.x,self.drone.y,self.drone.z)
-            self.analyzer.add_messages('user',self.analyzer.state_prompts+"Please output an action.")
+            self.analyzer.add_messages('user',self.analyzer.state_prompts+"Please output next action.")
             self.message_signal.emit(['GeoGPT',f"Move backward {action['move backward']}m"])
+        elif list(action.keys())[0]=='move up':
+            self.drone.move_up(action['move up'])
+            self.analyzer.add_messages('assistant',json.dumps(action))
+            self.drone.get_drone_state()
+            self.analyzer.get_drone_state_prompts(self.drone.x,self.drone.y,self.drone.z)
+            self.analyzer.add_messages('user',self.analyzer.state_prompts+"Please output next action.")
+            self.message_signal.emit(['GeoGPT',f"Move up {action['move up']}m"])
+        elif list(action.keys())[0]=='move down':
+            self.drone.move_up(action['move down'])
+            self.analyzer.add_messages('assistant',json.dumps(action))
+            self.drone.get_drone_state()
+            self.analyzer.get_drone_state_prompts(self.drone.x,self.drone.y,self.drone.z)
+            self.analyzer.add_messages('user',self.analyzer.state_prompts+"Please output next action.")
+            self.message_signal.emit(['GeoGPT',f"Move down {action['move down']}m"])
         elif list(action.keys())[0]=='get image':
             img_path=self.drone.capture_images("captures",f"{self.drone.capture_times}")
             self.drone.capture_times+=1
             self.captured_signal.emit(img_path)
             img_name=img_path+"_"+action["get image"]+".png"
             self.analyzer.descriptions=self.analyzer.get_descriptions(img_name)
+            self.message_signal.emit(['VLM',f"The {action["get image"]} image description is: "+self.analyzer.descriptions])
             self.analyzer.add_messages('assistant',json.dumps(action))
             self.drone.get_drone_state()
             self.analyzer.get_drone_state_prompts(self.drone.x,self.drone.y,self.drone.z)
-            self.analyzer.add_messages('user',"The image description is: "+self.analyzer.descriptions+self.analyzer.state_prompts+"Please output an action.")
+            self.analyzer.add_messages('user',f"The {action["get image"]} image description is: "+self.analyzer.descriptions+self.analyzer.state_prompts+"Please output next action.")
         elif list(action.keys())[0]=='land':
             self.stop=True
             self.message_signal.emit(['GeoGPT',"Land"])

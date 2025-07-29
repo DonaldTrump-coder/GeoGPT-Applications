@@ -32,7 +32,7 @@ class Agent_Processor:
 
     def init_prompts(self):
         #用视觉语言模型描述图像的提示词
-        self.description_prompts="You are helping a drone decide how to conduct its action. The image can be from one of the front, down, back, left, or right view directions of the drone cameras. Now please describe the image about what the image is, the necessary elements and their relative positional relations, in order to help others fully understand the image without seeing the image."
+        self.description_prompts="You are helping a drone decide how to conduct its action. The image can be from one of the front, down, back, left, or right view directions of the drone cameras. Now please simply describe the image about what the image is, the necessary elements and their relative positional relations, in order to help others fully understand the image without seeing the image."
 
         self.descriptions=""
 

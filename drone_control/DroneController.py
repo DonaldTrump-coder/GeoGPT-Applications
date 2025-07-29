@@ -72,10 +72,16 @@ class DroneController:
         return self.client.rotateByYawRateAsync(30, rad/30).join()
     
     def move_forward(self,s):#向前移动指定距离
-        return self.client.moveByVelocityBodyFrameAsync(vx=s/5, vy=0, vz=0, duration=5).join()
+        return self.client.moveByVelocityBodyFrameAsync(vx=-s/5, vy=0, vz=0, duration=5).join()
     
     def move_backward(self,s):#向后移动指定距离
-        return self.client.moveByVelocityBodyFrameAsync(vx=-s/5, vy=0, vz=0, duration=5).join()
+        return self.client.moveByVelocityBodyFrameAsync(vx=s/5, vy=0, vz=0, duration=5).join()
+    
+    def move_up(self,h):#向上移动指定距离
+        return self.client.moveByVelocityBodyFrameAsync(vx=0, vy=0, vz=-h/5, duration=5).join()
+    
+    def move_down(self,h):#向下移动指定距离
+        return self.client.moveByVelocityBodyFrameAsync(vx=0, vy=0, vz=h/5, duration=5).join()
 
     def land(self):
         """安全降落"""
