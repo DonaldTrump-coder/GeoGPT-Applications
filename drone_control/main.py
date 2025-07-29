@@ -79,7 +79,7 @@ def main():
 
     drone_task_thread=DroneTaskThread(drone,analyzer)
     drone_task_thread.captured_signal.connect(window.show_captured_image)
-    drone_task_thread.message_signal.connect(window)
+    drone_task_thread.message_signal.connect(window.send_message)
 
     drone_task_thread.start()
 
