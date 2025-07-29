@@ -1,17 +1,13 @@
 import re
 import json
 
-def extract_dict_block(text:str):
-    # 找到形如 { ... } 的 JSON 字典
-    match = re.search(r"\{.*?\}", text, re.DOTALL)
-    if match:
-        json_str = match.group()
-        # 替换单引号为双引号
-        json_str = json_str.replace("'", '"')
+def extract_last_json_dict(text):
+    # 提取所有 {...} 模式的 JSON 字典
+    matches = re.findall(r"\{.*?\}", text, re.DOTALL)
+    for json_str in reversed(matches):  # 从最后一个开始尝试解析
         try:
-            return json.loads(json_str)
-        except json.JSONDecodeError as e:
-            print("JSON decode failed:", e)
-            print("json_str:", json_str)
-            return None
+            clean_str = json_str.replace("'", '"')
+            return json.loads(clean_str)
+        except json.JSONDecodeError:
+            continue  # 尝试前一个
     return None
