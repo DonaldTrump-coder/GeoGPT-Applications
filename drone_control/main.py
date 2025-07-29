@@ -29,7 +29,6 @@ class DroneTaskThread(QtCore.QThread):
 
     def run(self):
         # 任务执行
-        print("【任务开始】无人机起飞...")
         self.message_signal.emit(['GeoGPT','任务开始，无人机起飞'])
         self.drone.takeoff(altitude=15)
         self.drone.get_drone_state()
@@ -45,7 +44,6 @@ class DroneTaskThread(QtCore.QThread):
             self.analyze_action(self.action)
             print(self.actions)
 
-        print("\n【任务完成】无人机降落...")
         self.message_signal.emit(['GeoGPT','任务完成，无人机降落'])
         self.drone.land()
 
