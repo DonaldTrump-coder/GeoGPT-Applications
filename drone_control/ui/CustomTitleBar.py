@@ -16,11 +16,14 @@ class CustomTitleBar(QtWidgets.QWidget):
 
         #增加右上角三个按钮控件
         self.btn_min = QtWidgets.QPushButton()
-        self.btn_min.setIcon(QtGui.QIcon("icons/minimize-sign.png"))
+        self.btn_min.setIcon(QtGui.QIcon("ui/icons/minimize-sign.png"))
         self.btn_min.setFixedSize(30, 30)
+        self.btn_min.setStyleSheet("border-radius: 30px;")
         self.btn_close = QtWidgets.QPushButton()
-        self.btn_close.setIcon(QtGui.QIcon("icons/cross.png"))
+        self.btn_close.setIcon(QtGui.QIcon("ui/icons/cross.png"))
         self.btn_close.setFixedSize(30, 30)
+        self.btn_close.setStyleSheet("border-radius: 30px;")
         self.btn_max_restore = QtWidgets.QPushButton()
-        self.btn_max_restore.setIcon(QtGui.QIcon("icons/maximise.png"))
+        self.btn_max_restore.setIcon(QtGui.QIcon("ui/icons/maximise.png"))
         self.btn_max_restore.setFixedSize(30, 30)
+        self.btn_max_restore.setStyleSheet("border-radius: 30px;")

@@ -1,5 +1,5 @@
 from PyQt5 import QtWidgets,QtGui,QtCore,QtWebEngineWidgets
-from SlideSwitch import SlideSwitch
+from ui.SlideSwitch import SlideSwitch
 
 class MultiMediaDisplay(QtWidgets.QWidget):
     def __init__(self, url, parent = None):
@@ -44,10 +44,10 @@ class MultiMediaDisplay(QtWidgets.QWidget):
             label.setStyleSheet("background-color: #222; color: white; border: 1px solid #555;")
 
         self.switch=SlideSwitch(self.container)
-        self.switch.setGeometry(840, 0, 60, 30)
+        self.switch.move(840, 100)
         self.switch_label=QtWidgets.QLabel("辅助描述",self.container)
-        self.switch_label.setGeometry(760, 0, 60, 30)
-        self.switch_label.setStyleSheet("background:white;")
+        self.switch_label.setGeometry(740, 98, 100, 30)
+        self.switch_label.setStyleSheet("color: black; font-family: 黑体; font-size:22px; background: transparent;")
 
         image_row_layout = QtWidgets.QHBoxLayout()
         image_row_layout.setSpacing(10)
@@ -93,8 +93,9 @@ class MultiMediaDisplay(QtWidgets.QWidget):
 class ChatDisplay(QtWidgets.QWidget):
     def __init__(self, parent = None):
         super().__init__(parent)
-        self.chatlabel=QtWidgets.QLabel("聊天区")
-        self.chatlabel.setStyleSheet("background-color: gray;")
+        self.chatlabel=QtWidgets.QLabel("智能体聊天区")
+        self.chatlabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.chatlabel.setStyleSheet("background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop: 0 #7aaaff, stop: 1 #a3c1ff); border-radius: 10px; color: #002244; font-size: 24px; font-weight: bold; font-family: 微软雅黑;")
 
         self.messagedisplay=MessageDisplay()
         self.input_box=QtWidgets.QTextEdit()
@@ -105,11 +106,13 @@ class ChatDisplay(QtWidgets.QWidget):
         self.input_layout=QtWidgets.QHBoxLayout()
         self.input_layout.addWidget(self.input_box)
         self.input_layout.addWidget(self.send_button)
+        self.input_widget=QtWidgets.QWidget()
+        self.input_widget.setLayout(self.input_layout)
 
         layout=QtWidgets.QVBoxLayout(self)
-        layout.addWidget(self.chatlabel)
-        layout.addWidget(self.messagedisplay)
-        layout.addLayout(self.input_layout)
+        layout.addWidget(self.chatlabel,1.5)
+        layout.addWidget(self.messagedisplay,10)
+        layout.addWidget(self.input_widget,1)
         layout.setContentsMargins(3,3,3,3)
 
     def send_descriptions(self,text):
@@ -146,7 +149,7 @@ class OneMessage(QtWidgets.QWidget):
         layout.setSpacing(10)
 
         avatar_label = QtWidgets.QLabel()
-        avatar_label.setPixmap(QtGui.QPixmap("icons/artificial-intelligence.png").scaled(40, 40, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation))
+        avatar_label.setPixmap(QtGui.QPixmap("ui/icons/artificial-intelligence.png").scaled(40, 40, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation))
 
         text_label = QtWidgets.QLabel(text)
         text_label.setWordWrap(True)
@@ -176,6 +179,6 @@ class MainContentLayout(QtWidgets.QWidget):
         self.chat=ChatDisplay()
 
         main_layout=QtWidgets.QHBoxLayout(self)
-        main_layout.addWidget(self.video_and_images)
-        main_layout.addWidget(self.chat)
+        main_layout.addWidget(self.video_and_images,2.5)
+        main_layout.addWidget(self.chat,1)
         main_layout.setContentsMargins(2, 2, 2, 2)

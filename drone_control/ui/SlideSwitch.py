@@ -6,7 +6,7 @@ class SlideSwitch(QWidget):
     toggled=pyqtSignal(bool)
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setFixedSize(60, 30)
+        self.setFixedSize(50, 25)
 
         self._checked = False
         self._thumb_pos = 2  # 滑块位置 (像素)

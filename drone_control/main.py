@@ -66,6 +66,7 @@ class DroneTaskThread(QtCore.QThread):
 
     #解析模型输出，并直接执行模型指令
     def analyze_action(self, action:dict):
+        self.analyzer.delete_message()
         if action is None:#默认拍摄前方照片
             img_path=self.drone.capture_images("captures",f"{self.drone.capture_times}")
             self.drone.capture_times+=1

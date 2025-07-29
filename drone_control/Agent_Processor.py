@@ -32,7 +32,7 @@ class Agent_Processor:
 
     def init_prompts(self):
         #用视觉语言模型描述图像的提示词
-        self.description_prompts="You are helping a drone decide how to conduct its action. The image can be from one of the front, down, back, left, or right view directions of the drone cameras. Now please simply describe the image about what the image is, the necessary elements , how far it is and their relative positional relations, in order to help others fully understand the image without seeing the image."
+        self.description_prompts="You are helping a drone decide how to conduct its action. The image can be from one of the front, down, back, left, or right view directions of the drone cameras. Now please simply describe the image about what the image is, the necessary elements , how far it is and their relative positional relations, in order to help others fully understand the image without seeing the image. The description should be simple."
 
         self.descriptions=""
 
@@ -183,3 +183,9 @@ class Agent_Processor:
 
     def input_task_positions(self,starting_x,starting_y,starting_z,object_x,object_y,object_z):
         self.GeoGPT_prompts+=f"The starting point of the drone is [{starting_x}, {starting_y}, {starting_z}] as position in the format [x, y, z]. The object is near [{object_x}, {object_y}, {object_z}]."
+
+    #删除前面的信息
+    def delete_message(self):
+        if len(self.messages)>10:
+            self.messages.pop(2)#删除列表中第三个元素
+            self.messages.pop(2)#删除列表中第四个元素
