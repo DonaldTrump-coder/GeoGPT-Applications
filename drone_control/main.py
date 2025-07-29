@@ -5,6 +5,7 @@ from Agent_Processor import Agent_Processor
 from PyQt5 import QtWidgets,QtCore
 import sys
 from ui.dronetask_display import Drone_Window
+from utils.text_tools import extract_dict_block
 
 stream_url="http://127.0.0.1"
 os.environ['QTWEBENGINE_CHROMIUM_FLAGS'] = '--enable-gpu-rasterization --ignore-gpu-blacklist --enable-zero-copy'
@@ -40,6 +41,7 @@ class DroneTaskThread(QtCore.QThread):
 
         #while(self.stop is False):
         self.actions=self.analyzer.post_large_language_model()
+        self.actions=extract_dict_block(self.actions)
         print(self.actions)
 
         self.message_signal.emit(['VLM','received'])
