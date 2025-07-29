@@ -5,12 +5,12 @@ class MultiMediaDisplay(QtWidgets.QWidget):
         super().__init__(parent)
 
         self.container=QtWidgets.QWidget()
-        self.container.setFixedSize(900, 750)
+        self.container.setFixedSize(900, 600)
         self.container.setStyleSheet("background-color: black;")
 
         #实时视频展示框
         self.videodisplay=QtWidgets.QWidget(self.container)
-        self.videodisplay.setFixedSize(900,750)
+        self.videodisplay.setFixedSize(900,600)
         self.videodisplay.setStyleSheet("color: black;background-color: black;")
         self.webview=QtWebEngineWidgets.QWebEngineView(self.videodisplay)
         self.webview.setUrl(QtCore.QUrl(url))
@@ -24,13 +24,13 @@ class MultiMediaDisplay(QtWidgets.QWidget):
         #图像展示框
         self.image1=QtWidgets.QLabel("前视", self.container)
         self.image1.setFixedSize(280, 160)
-        self.image1.move(10,580)
+        self.image1.move(10,430)
         self.image1.setStyleSheet("background-color: #222; color: white; border: 1px solid #555;")
         self.image1.setAlignment(QtCore.Qt.AlignCenter)
 
         self.image2=QtWidgets.QLabel("后视", self.container)
         self.image2.setFixedSize(280, 160)
-        self.image2.move(610,580)
+        self.image2.move(610,430)
         self.image2.setStyleSheet("background-color: #222; color: white; border: 1px solid #555;")
         self.image2.setAlignment(QtCore.Qt.AlignCenter)
 
