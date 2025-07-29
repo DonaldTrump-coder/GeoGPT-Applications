@@ -97,10 +97,11 @@ class Drone_Window(QtWidgets.QMainWindow,Drone_Ui):
     def send_descriptions(self,text:str):
         self.content.chat.send_descriptions(text)
 
-    def get_assist_signal(self,signal):
+    def get_assist_signal(self,signal:QtCore.pyqtSignal):
         self.assist_signal=signal
 
     def send_fixed_descriptions(self):
         text=self.content.chat.input_box.toPlainText().strip()
         if text:
             self.assist_signal.emit(text)
+            self.content.chat.input_box.setEnabled(False)

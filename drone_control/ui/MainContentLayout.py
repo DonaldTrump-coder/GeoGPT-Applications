@@ -99,6 +99,7 @@ class ChatDisplay(QtWidgets.QWidget):
         self.messagedisplay=MessageDisplay()
         self.input_box=QtWidgets.QTextEdit()
         self.input_box.setFixedHeight(30)
+        self.input_box.setEnabled(False)
         self.send_button=QtWidgets.QPushButton("发送")
 
         self.input_layout=QtWidgets.QHBoxLayout()
@@ -113,6 +114,7 @@ class ChatDisplay(QtWidgets.QWidget):
 
     def send_descriptions(self,text):
         self.input_box.setText(text)
+        self.input_box.setEnabled(True)
 
 class MessageDisplay(QtWidgets.QScrollArea):
     def __init__(self, parent=None):

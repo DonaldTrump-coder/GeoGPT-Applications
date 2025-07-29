@@ -31,7 +31,6 @@ class DroneTaskThread(QtCore.QThread):
         self.assist=False
         self.loop=None
         self.assist_result=None#修改过后的描述（界面输出的）
-        self.assist_signal.connect(self.handle_assist)
 
     def run(self):
         # 任务执行
@@ -74,14 +73,21 @@ class DroneTaskThread(QtCore.QThread):
             img_name=img_path+"_front.png"
             self.analyzer.descriptions=self.analyzer.get_descriptions(img_name)
             if self.assist is True:
+                self.send_description_signal.emit(self.analyzer.descriptions)
                 self.loop=QtCore.QEventLoop()
                 self.loop.exec_()
                 self.analyzer.descriptions=self.assist_result
-            self.message_signal.emit(['VLM',"The front image description is: "+self.analyzer.descriptions])
-            self.analyzer.add_messages('assistant',json.dumps(action))
-            self.drone.get_drone_state()
-            self.analyzer.get_drone_state_prompts(self.drone.x,self.drone.y,self.drone.z)
-            self.analyzer.add_messages('user',"The front image description is: "+self.analyzer.descriptions+self.analyzer.state_prompts+"Please output next action.")
+                self.message_signal.emit(['user',"The front image description is: "+self.analyzer.descriptions])
+                self.analyzer.add_messages('assistant',json.dumps(action))
+                self.drone.get_drone_state()
+                self.analyzer.get_drone_state_prompts(self.drone.x,self.drone.y,self.drone.z)
+                self.analyzer.add_messages('user',"The front image description is: "+self.analyzer.descriptions+self.analyzer.state_prompts+"Please output next action.")
+            else:
+                self.message_signal.emit(['VLM',"The front image description is: "+self.analyzer.descriptions])
+                self.analyzer.add_messages('assistant',json.dumps(action))
+                self.drone.get_drone_state()
+                self.analyzer.get_drone_state_prompts(self.drone.x,self.drone.y,self.drone.z)
+                self.analyzer.add_messages('user',"The front image description is: "+self.analyzer.descriptions+self.analyzer.state_prompts+"Please output next action.")
         elif list(action.keys())[0]=='turn left':
             self.drone.turn_left(action['turn left'])
             self.analyzer.add_messages('assistant',json.dumps(action))
@@ -131,14 +137,21 @@ class DroneTaskThread(QtCore.QThread):
             img_name=img_path+"_"+action["get image"]+".png"
             self.analyzer.descriptions=self.analyzer.get_descriptions(img_name)
             if self.assist is True:
+                self.send_description_signal.emit(self.analyzer.descriptions)
                 self.loop=QtCore.QEventLoop()
                 self.loop.exec_()
                 self.analyzer.descriptions=self.assist_result
-            self.message_signal.emit(['VLM',"The"+action["get image"]+"image description is: "+self.analyzer.descriptions])
-            self.analyzer.add_messages('assistant',json.dumps(action))
-            self.drone.get_drone_state()
-            self.analyzer.get_drone_state_prompts(self.drone.x,self.drone.y,self.drone.z)
-            self.analyzer.add_messages('user',"The"+action["get image"]+"image description is: "+self.analyzer.descriptions+self.analyzer.state_prompts+"Please output next action.")
+                self.message_signal.emit(['user',"The"+action["get image"]+"image description is: "+self.analyzer.descriptions])
+                self.analyzer.add_messages('assistant',json.dumps(action))
+                self.drone.get_drone_state()
+                self.analyzer.get_drone_state_prompts(self.drone.x,self.drone.y,self.drone.z)
+                self.analyzer.add_messages('user',"The"+action["get image"]+"image description is: "+self.analyzer.descriptions+self.analyzer.state_prompts+"Please output next action.")
+            else:
+                self.message_signal.emit(['VLM',"The"+action["get image"]+"image description is: "+self.analyzer.descriptions])
+                self.analyzer.add_messages('assistant',json.dumps(action))
+                self.drone.get_drone_state()
+                self.analyzer.get_drone_state_prompts(self.drone.x,self.drone.y,self.drone.z)
+                self.analyzer.add_messages('user',"The"+action["get image"]+"image description is: "+self.analyzer.descriptions+self.analyzer.state_prompts+"Please output next action.")
         elif list(action.keys())[0]=='land':
             self.stop=True
             self.message_signal.emit(['GeoGPT',"Land"])
@@ -178,6 +191,7 @@ def main():
     drone_task_thread.message_signal.connect(window.send_message)
     drone_task_thread.send_description_signal.connect(window.send_descriptions)
     window.content.video_and_images.switch.toggled.connect(drone_task_thread.assist_change)
+    drone_task_thread.assist_signal.connect(drone_task_thread.handle_assist)
 
     window.get_assist_signal(drone_task_thread.assist_signal)
     #将获取修改后的描述文本信号送至界面
