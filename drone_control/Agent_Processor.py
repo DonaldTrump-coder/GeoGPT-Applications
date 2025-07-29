@@ -166,7 +166,8 @@ class Agent_Processor:
                         unescaped_str = unescaped_str[1:-1]
 
                         # Parse JSON
-                    data = json.loads(unescaped_str)
+                    #data = json.loads(unescaped_str)
+                    data=json.loads(json_str)
                     responses.append(data)  # Save response
         full_content=""
         for response in responses:
