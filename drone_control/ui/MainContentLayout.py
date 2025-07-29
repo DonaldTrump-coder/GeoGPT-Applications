@@ -110,9 +110,9 @@ class ChatDisplay(QtWidgets.QWidget):
         self.input_widget.setLayout(self.input_layout)
 
         layout=QtWidgets.QVBoxLayout(self)
-        layout.addWidget(self.chatlabel,1.5)
-        layout.addWidget(self.messagedisplay,10)
-        layout.addWidget(self.input_widget,1)
+        layout.addWidget(self.chatlabel,3)
+        layout.addWidget(self.messagedisplay,20)
+        layout.addWidget(self.input_widget,2)
         layout.setContentsMargins(3,3,3,3)
 
     def send_descriptions(self,text):
