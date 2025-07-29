@@ -114,7 +114,7 @@ class DroneTaskThread(QtCore.QThread):
             self.analyzer.add_messages('assistant',json.dumps(action))
             self.drone.get_drone_state()
             self.analyzer.get_drone_state_prompts(self.drone.x,self.drone.y,self.drone.z)
-            self.analyzer.add_messages('user',f"The {action["get image"]} image description is: "+self.analyzer.descriptions+self.analyzer.state_prompts+"Please output next action.")
+            self.analyzer.add_messages('user',"The"+action["get image"]+"image description is: "+self.analyzer.descriptions+self.analyzer.state_prompts+"Please output next action.")
         elif list(action.keys())[0]=='land':
             self.stop=True
             self.message_signal.emit(['GeoGPT',"Land"])
