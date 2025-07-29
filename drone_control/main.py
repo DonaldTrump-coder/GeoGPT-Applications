@@ -34,9 +34,8 @@ class DroneTaskThread(QtCore.QThread):
         self.drone.get_drone_state()
         self.analyzer.get_drone_state_prompts(self.drone.x,self.drone.y,self.drone.z)
 
-        self.analyzer.add_messages('assistant','{ "take off":"15" }')
-
         self.analyzer.add_messages('user',self.analyzer.GeoGPT_prompts+self.analyzer.control_prompts+self.analyzer.state_prompts)
+        self.analyzer.add_messages('assistant','{ "take off": 15 }')
         self.stop=False
 
         #while(self.stop is False):
