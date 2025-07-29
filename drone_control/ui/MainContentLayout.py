@@ -1,5 +1,5 @@
 from PyQt5 import QtWidgets,QtGui,QtCore,QtWebEngineWidgets
-from ui.SlideSwitch import SlideSwitch
+from SlideSwitch import SlideSwitch
 
 class MultiMediaDisplay(QtWidgets.QWidget):
     def __init__(self, url, parent = None):
@@ -110,9 +110,9 @@ class ChatDisplay(QtWidgets.QWidget):
         self.input_widget.setLayout(self.input_layout)
 
         layout=QtWidgets.QVBoxLayout(self)
-        layout.addWidget(self.chatlabel,3)
-        layout.addWidget(self.messagedisplay,20)
-        layout.addWidget(self.input_widget,2)
+        layout.addWidget(self.chatlabel,2)
+        layout.addWidget(self.messagedisplay,18)
+        layout.addWidget(self.input_widget,3)
         layout.setContentsMargins(3,3,3,3)
 
     def send_descriptions(self,text):
