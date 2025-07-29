@@ -1,6 +1,7 @@
 from dronetask_display import Drone_Window
 import sys
 from PyQt5 import QtWidgets,QtCore
+import time
 
 stream_url="http://127.0.0.1"
 

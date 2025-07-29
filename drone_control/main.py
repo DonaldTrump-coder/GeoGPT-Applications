@@ -49,7 +49,7 @@ class DroneTaskThread(QtCore.QThread):
             self.message_signal.emit(['VLM','你好'])
 
         print("\n【任务完成】无人机降落...")
-        self.log_signal.emit("\n【任务完成】无人机降落...")
+        self.message_signal.emit(['GeoGPT','任务完成，无人机降落'])
         self.drone.land()
 
     #解析模型输出，并直接执行模型指令
