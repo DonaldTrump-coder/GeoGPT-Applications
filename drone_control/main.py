@@ -5,7 +5,7 @@ from Agent_Processor import Agent_Processor
 from PyQt5 import QtWidgets,QtCore
 import sys
 from ui.dronetask_display import Drone_Window
-from utils.text_tools import extract_dict_block
+from utils.text_tools import extract_last_json_dict
 
 stream_url="http://127.0.0.1"
 os.environ['QTWEBENGINE_CHROMIUM_FLAGS'] = '--enable-gpu-rasterization --ignore-gpu-blacklist --enable-zero-copy'
@@ -41,7 +41,7 @@ class DroneTaskThread(QtCore.QThread):
 
         #while(self.stop is False):
         self.actions=self.analyzer.post_large_language_model()
-        self.actions=extract_dict_block(self.actions)
+        self.actions=extract_last_json_dict(self.actions)
         print(self.actions)
 
         self.message_signal.emit(['VLM','received'])
@@ -53,9 +53,11 @@ class DroneTaskThread(QtCore.QThread):
         self.drone.land()
 
     #解析模型输出，并直接执行模型指令
-    def analyze_action(self, action:dict, image_processor):
+    def analyze_action(self, action:dict):
         if list(action.keys())[0]=='turn left':
-            self.turn_left(action['turn left'])
+            self.drone.turn_left(action['turn left'])
+        elif list(action.keys())[0]=='turn right':
+            self.drone.turn_right(action['turn right'])
 
 # 主任务流程
 def main():
