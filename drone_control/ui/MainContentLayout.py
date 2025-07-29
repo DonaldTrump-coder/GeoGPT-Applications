@@ -179,6 +179,6 @@ class MainContentLayout(QtWidgets.QWidget):
         self.chat=ChatDisplay()
 
         main_layout=QtWidgets.QHBoxLayout(self)
-        main_layout.addWidget(self.video_and_images,2.5)
-        main_layout.addWidget(self.chat,1)
+        main_layout.addWidget(self.video_and_images,5)
+        main_layout.addWidget(self.chat,2)
         main_layout.setContentsMargins(2, 2, 2, 2)
