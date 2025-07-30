@@ -151,13 +151,13 @@ class OneMessage(QtWidgets.QWidget):
         layout.setSpacing(10)
 
         GPT_label = QtWidgets.QLabel()
-        GPT_label.setPixmap(QtGui.QPixmap("icons/artificial-intelligence.png").scaled(40, 40, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation))
+        GPT_label.setPixmap(QtGui.QPixmap("ui/icons/artificial-intelligence.png").scaled(40, 40, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation))
 
         user_label = QtWidgets.QLabel()
-        user_label.setPixmap(QtGui.QPixmap("icons/user.png").scaled(40, 40, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation))
+        user_label.setPixmap(QtGui.QPixmap("ui/icons/user.png").scaled(40, 40, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation))
 
         VLM_label = QtWidgets.QLabel()
-        VLM_label.setPixmap(QtGui.QPixmap("icons/zoom.png").scaled(40, 40, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation))
+        VLM_label.setPixmap(QtGui.QPixmap("ui/icons/zoom.png").scaled(40, 40, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation))
 
         text_widget=QtWidgets.QWidget()
         widget_layout=QtWidgets.QVBoxLayout(text_widget)
