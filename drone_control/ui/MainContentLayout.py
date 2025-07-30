@@ -83,10 +83,9 @@ class MultiMediaDisplay(QtWidgets.QWidget):
             label.setStyleSheet("background-color: #222; color: white; border: 1px solid #555;")
 
         self.switch=SlideSwitch(self.container)
-        self.switch.move(840, 100)
         self.switch_label=QtWidgets.QLabel("辅助描述",self.container)
-        self.switch_label.setGeometry(740, 98, 100, 30)
-        self.switch_label.setStyleSheet("color: black; font-family: 黑体; font-size:22px; background: transparent;")
+        
+        self.switch_label.setStyleSheet("color: white; font-family: 黑体; font-size:22px; background: transparent;")
 
         self.images_widget=QtWidgets.QWidget()
         image_row_layout = QtWidgets.QHBoxLayout(self.images_widget)
@@ -111,6 +110,10 @@ class MultiMediaDisplay(QtWidgets.QWidget):
         self.image_widget2.move(int(self.container.width()*0.67),
                                 int(self.container.height()*0.58)
                                 )
+        self.switch.move(int(self.container.width()*0.92), int(self.container.height()*0.2))
+        self.switch_label.move(int(self.container.width()*0.90),
+                               int(self.container.height()*0.15)
+                              )
         super().resizeEvent(event)
         
     def show_captured_image(self,img_path):
