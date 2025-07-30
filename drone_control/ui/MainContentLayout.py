@@ -31,9 +31,6 @@ class MultiMediaDisplay(QtWidgets.QWidget):
         self.image1=QtWidgets.QLabel()
         image_layout1.addWidget(self.image1)
         self.image1.setFixedSize(280, 160)
-        self.image_widget1.move(int(self.container.width()*0.02),
-                                int(self.container.height()*0.58)
-                                )
         self.image1.setStyleSheet("background-color: #222; color: white; border: 1px solid #555;")
         self.image1.setAlignment(QtCore.Qt.AlignCenter)
 
@@ -47,9 +44,6 @@ class MultiMediaDisplay(QtWidgets.QWidget):
         self.image2=QtWidgets.QLabel()
         image_layout2.addWidget(self.image2)
         self.image2.setFixedSize(280, 160)
-        self.image_widget2.move(int(self.container.width()),
-                                int(self.container.height()*0.58)
-                                )
         self.image2.setStyleSheet("background-color: #222; color: white; border: 1px solid #555;")
         self.image2.setAlignment(QtCore.Qt.AlignCenter)
 
@@ -111,8 +105,14 @@ class MultiMediaDisplay(QtWidgets.QWidget):
         container_size = self.container.size()
         self.videodisplay.setGeometry(0, 0, container_size.width(), container_size.height())
         self.webview.setGeometry(0, 0, container_size.width(), container_size.height())
+        self.image_widget1.move(int(self.container.width()*0.015),
+                                int(self.container.height()*0.58)
+                                )
+        self.image_widget2.move(int(self.container.width()*0.67),
+                                int(self.container.height()*0.58)
+                                )
         super().resizeEvent(event)
-
+        
     def show_captured_image(self,img_path):
         front_path=img_path+"_front.png"
         down_path=img_path+"_down.png"
