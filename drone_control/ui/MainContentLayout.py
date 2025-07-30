@@ -221,7 +221,7 @@ class OneMessage(QtWidgets.QWidget):
         text_label.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         text_label.setSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
         text_label.setReadOnly(True)  # 只读，不允许编辑
-        text_label.document().setTextWidth(int(max_width*0.34))
+        text_label.document().setTextWidth(int(max_width*0.6))
         height = int(text_label.document().size().height()) + 25  # +5是为了留点边距
         text_label.setFixedHeight(height)
 
