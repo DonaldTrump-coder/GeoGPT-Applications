@@ -105,3 +105,4 @@ class Drone_Window(QtWidgets.QMainWindow,Drone_Ui):
         if text:
             self.assist_signal.emit(text)
             self.content.chat.input_box.setEnabled(False)
+            self.content.chat.input_box.clear()
