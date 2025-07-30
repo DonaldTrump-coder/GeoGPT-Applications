@@ -72,6 +72,7 @@ class DroneTaskThread(QtCore.QThread):
             self.captured_signal.emit(img_path)
             img_name=img_path+"_front.png"
             self.analyzer.descriptions=self.analyzer.get_descriptions(img_name)
+            self.message_signal.emit(['GeoGPT',f"Get front image"])
             if self.assist is True:
                 self.send_description_signal.emit(self.analyzer.descriptions)
                 self.loop=QtCore.QEventLoop()
@@ -137,7 +138,7 @@ class DroneTaskThread(QtCore.QThread):
             img_name=img_path+"_"+action["get image"]+".png"
             self.analyzer.descriptions=self.analyzer.get_descriptions(img_name)
             self.analyzer.add_messages('assistant',json.dumps(action))
-            self.message_signal.emit(['GeoGPT',f"Get image {action['get image']}"])
+            self.message_signal.emit(['GeoGPT',f"Get {action['get image']} image"])
             if self.assist is True:
                 self.send_description_signal.emit(self.analyzer.descriptions)
                 self.loop=QtCore.QEventLoop()
