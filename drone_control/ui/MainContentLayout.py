@@ -148,27 +148,40 @@ class OneMessage(QtWidgets.QWidget):
         layout.setContentsMargins(5,5,5,5)
         layout.setSpacing(10)
 
-        avatar_label = QtWidgets.QLabel()
-        avatar_label.setPixmap(QtGui.QPixmap("ui/icons/artificial-intelligence.png").scaled(40, 40, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation))
+        GPT_label = QtWidgets.QLabel()
+        GPT_label.setPixmap(QtGui.QPixmap("ui/icons/artificial-intelligence.png").scaled(40, 40, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation))
 
+        user_label = QtWidgets.QLabel()
+        user_label.setPixmap(QtGui.QPixmap("ui/icons/user.png").scaled(40, 40, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation))
+
+        VLM_label = QtWidgets.QLabel()
+        VLM_label.setPixmap(QtGui.QPixmap("ui/icons/zoom.png").scaled(40, 40, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation))
+
+        text_widget=QtWidgets.QWidget()
+        widget_layout=QtWidgets.QVBoxLayout(text_widget)
+        name_label=QtWidgets.QLabel()
         text_label = QtWidgets.QLabel(text)
         text_label.setWordWrap(True)
-        
+        widget_layout.addWidget(name_label)
+        widget_layout.addWidget(text_label)
 
         if user == "VLM":
+            name_label.setText("VLM")
             layout.addStretch()
-            layout.addWidget(text_label)
-            layout.addWidget(avatar_label)
+            layout.addWidget(text_widget)
+            layout.addWidget(VLM_label)
 
         elif user == "GeoGPT":
-            layout.addWidget(avatar_label)
-            layout.addWidget(text_label)
+            name_label.setText("GeoGPT")
+            layout.addWidget(GPT_label)
+            layout.addWidget(text_widget)
             layout.addStretch()
 
         else:
+            name_label.setText("user")
             layout.addStretch()
-            layout.addWidget(text_label)
-            layout.addWidget(avatar_label)
+            layout.addWidget(text_widget)
+            layout.addWidget(user_label)
 
         self.setLayout(layout)
 
