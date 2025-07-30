@@ -54,7 +54,6 @@ class DroneTaskThread(QtCore.QThread):
             self.actions=self.analyzer.post_large_language_model()
             self.action=extract_last_json_dict(self.actions)
             self.analyze_action(self.action)
-            print(self.analyzer.messages[0])
 
         self.message_signal.emit(['GeoGPT','任务完成，无人机降落'])
         self.drone.land()

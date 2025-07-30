@@ -189,7 +189,7 @@ class MessageDisplay(QtWidgets.QScrollArea):
 
     #添加聊天信息（聊天文本以及是否为用户）
     def add_message(self,text,user):
-        message=OneMessage(text,user,self.width()*0.7)
+        message=OneMessage(text,user,self.width()*0.75)
         self.message_area.addWidget(message)
         QtCore.QTimer.singleShot(0, self.scroll_to_bottom)
 
