@@ -23,7 +23,7 @@ class MultiMediaDisplay(QtWidgets.QWidget):
 
         #图像展示框
         self.image_widget1=QtWidgets.QWidget(self.container)
-        self.image_widget1.setStyleSheet("background: white;")
+        self.image_widget1.setStyleSheet("background: white; border: 2px solid #888888; border-radius: 10px;")
         image_layout1=QtWidgets.QVBoxLayout(self.image_widget1)
         label1=QtWidgets.QLabel("前视")
         label1.setAlignment(QtCore.Qt.AlignCenter)
@@ -32,14 +32,14 @@ class MultiMediaDisplay(QtWidgets.QWidget):
         self.image1=QtWidgets.QLabel()
         image_layout1.addWidget(self.image1)
         self.image1.setFixedSize(280, 160)
-        self.image_widget1.move(int(self.container.width()*0.01),
-                                int(self.container.height()*0.65)
+        self.image_widget1.move(int(self.container.width()*0.02),
+                                int(self.container.height()*0.60)
                                 )
         self.image1.setStyleSheet("background-color: #222; color: white; border: 1px solid #555;")
         self.image1.setAlignment(QtCore.Qt.AlignCenter)
 
         self.image_widget2=QtWidgets.QWidget(self.container)
-        self.image_widget2.setStyleSheet("background: white;")
+        self.image_widget2.setStyleSheet("background: white; border: 2px solid #888888; border-radius: 10px;")
         image_layout2=QtWidgets.QVBoxLayout(self.image_widget2)
         label2=QtWidgets.QLabel("后视")
         label2.setAlignment(QtCore.Qt.AlignCenter)
@@ -49,13 +49,13 @@ class MultiMediaDisplay(QtWidgets.QWidget):
         image_layout2.addWidget(self.image2)
         self.image2.setFixedSize(280, 160)
         self.image_widget2.move(int(self.container.width()),
-                                int(self.container.height()*0.65)
+                                int(self.container.height()*0.60)
                                 )
         self.image2.setStyleSheet("background-color: #222; color: white; border: 1px solid #555;")
         self.image2.setAlignment(QtCore.Qt.AlignCenter)
 
         self.image_widget3=QtWidgets.QWidget()
-        self.image_widget3.setStyleSheet("background: white;")
+        self.image_widget3.setStyleSheet("background: white; border: 2px solid #888888; border-radius: 10px;")
         image_layout3=QtWidgets.QVBoxLayout(self.image_widget3)
         label3=QtWidgets.QLabel("左视")
         label3.setAlignment(QtCore.Qt.AlignCenter)
@@ -65,7 +65,7 @@ class MultiMediaDisplay(QtWidgets.QWidget):
         image_layout3.addWidget(self.image3,10)
 
         self.image_widget4=QtWidgets.QWidget()
-        self.image_widget4.setStyleSheet("background: white;")
+        self.image_widget4.setStyleSheet("background: white; border: 2px solid #888888; border-radius: 10px;")
         image_layout4=QtWidgets.QVBoxLayout(self.image_widget4)
         label4=QtWidgets.QLabel("俯视")
         label4.setAlignment(QtCore.Qt.AlignCenter)
@@ -75,7 +75,7 @@ class MultiMediaDisplay(QtWidgets.QWidget):
         image_layout4.addWidget(self.image4,10)
 
         self.image_widget5=QtWidgets.QWidget()
-        self.image_widget5.setStyleSheet("background: white;")
+        self.image_widget5.setStyleSheet("background: white; border: 2px solid #888888; border-radius: 10px;")
         image_layout5=QtWidgets.QVBoxLayout(self.image_widget5)
         label5=QtWidgets.QLabel("右视")
         label5.setAlignment(QtCore.Qt.AlignCenter)
@@ -149,6 +149,8 @@ class ChatDisplay(QtWidgets.QWidget):
         
         self.input_box.setEnabled(False)
         self.send_button=QtWidgets.QPushButton("发送")
+        self.send_button.setFixedHeight(40)
+        self.send_button.setStyleSheet("QPushButton{background-color: #ffb6c1;border: 2px solid #ff69b4;border-radius: 18px;color: white;font-weight: bold;font-size: 16px;font-family: 微软雅黑; padding: 6px 12px;} QPushButton:hover {background-color: #ffa6c9;}QPushButton:pressed {background-color: #ff69b4;}")
 
         input_layout=QtWidgets.QHBoxLayout()
         input_layout.addWidget(self.input_box)
