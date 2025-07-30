@@ -162,6 +162,7 @@ class OneMessage(QtWidgets.QWidget):
         text_widget=QtWidgets.QWidget()
         widget_layout=QtWidgets.QVBoxLayout(text_widget)
         name_label=QtWidgets.QLabel()
+        name_label.setStyleSheet("color: #555555; font-family: Consolas; font-size: 16px;")
         text_label = QtWidgets.QTextBrowser()
         text_label.setText(text)
 
@@ -170,8 +171,8 @@ class OneMessage(QtWidgets.QWidget):
         text_label.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         text_label.setSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
         text_label.setReadOnly(True)  # 只读，不允许编辑
-        text_label.document().setTextWidth(max_width*0.6)
-        height = int(text_label.document().size().height()) + 15  # +5是为了留点边距
+        text_label.document().setTextWidth(int(max_width*0.34))
+        height = int(text_label.document().size().height()) + 25  # +5是为了留点边距
         text_label.setFixedHeight(height)
 
         #text_label.setWordWrap(True)
@@ -182,7 +183,7 @@ class OneMessage(QtWidgets.QWidget):
         if user == "VLM":
             name_label.setText("VLM")
             widget_layout.setAlignment(QtCore.Qt.AlignRight)
-            text_label.setStyleSheet("background-color: #d0f0ff; color: #003366;font-size: 14px;padding: 8px 12px;border-radius: 12px;")
+            text_label.setStyleSheet("color:#000000; font-family: Arial; font-size: 18px;background-color: #d0f0ff; padding: 8px 12px;border-radius: 12px;")
             name_label.setAlignment(QtCore.Qt.AlignRight)
             layout.addStretch()
             layout.addWidget(text_widget)
@@ -191,7 +192,7 @@ class OneMessage(QtWidgets.QWidget):
         elif user == "GeoGPT":
             name_label.setText("GeoGPT")
             name_label.setAlignment(QtCore.Qt.AlignLeft)
-            text_label.setStyleSheet("background-color: #f0f0f0; color: #003366;font-size: 14px;padding: 8px 12px;border-radius: 12px;")
+            text_label.setStyleSheet("color:#000000; font-family: Arial; font-size: 18px;background-color: #f0f0f0; padding: 8px 12px;border-radius: 12px;")
             layout.addWidget(GPT_label)
             layout.addWidget(text_widget)
             layout.addStretch()
@@ -200,7 +201,7 @@ class OneMessage(QtWidgets.QWidget):
             name_label.setText("user")
             name_label.setAlignment(QtCore.Qt.AlignRight)
             widget_layout.setAlignment(QtCore.Qt.AlignRight)
-            text_label.setStyleSheet("background-color: #b9f6ca; color: #003366;font-size: 14px;padding: 8px 12px;border-radius: 12px;")
+            text_label.setStyleSheet("color:#000000; font-family: Arial; font-size: 18px;background-color: #b9f6ca; padding: 8px 12px;border-radius: 12px;")
             layout.addStretch()
             layout.addWidget(text_widget)
             layout.addWidget(user_label)
