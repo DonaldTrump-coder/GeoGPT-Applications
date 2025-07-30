@@ -6,13 +6,12 @@ class MultiMediaDisplay(QtWidgets.QWidget):
         super().__init__(parent)
 
         self.container=QtWidgets.QWidget()
-        self.container.setStyleSheet("background-color: white;")
+        self.container.setStyleSheet("background-color: black;")
 
         #实时视频展示框
         self.videodisplay=QtWidgets.QWidget(self.container)
-        self.videodisplay.setGeometry(0,0,self.container.width(),self.container.height())
         self.videodisplay.setStyleSheet("color: white;background-color: white;")
-        self.webview=QtWebEngineWidgets.QWebEngineView(self.videodisplay)
+        self.webview=QtWebEngineWidgets.QWebEngineView()
         self.webview.setUrl(QtCore.QUrl(url))
         weblayout=QtWidgets.QVBoxLayout(self.videodisplay)
         weblayout.setContentsMargins(0,0,0,0)
@@ -106,6 +105,13 @@ class MultiMediaDisplay(QtWidgets.QWidget):
         layout.addWidget(self.images_widget,2)
         layout.setContentsMargins(1,1,1,1)
         layout.setSpacing(5)
+
+    def resizeEvent(self, event):
+        # 设置 videodisplay 和 webview 的大小为 container 的大小
+        container_size = self.container.size()
+        self.videodisplay.setGeometry(0, 0, container_size.width(), container_size.height())
+        self.webview.setGeometry(0, 0, container_size.width(), container_size.height())
+        super().resizeEvent(event)
 
     def show_captured_image(self,img_path):
         front_path=img_path+"_front.png"
