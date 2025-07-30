@@ -176,7 +176,7 @@ class OneMessage(QtWidgets.QWidget):
         text_label.setFixedHeight(height)
 
         #text_label.setWordWrap(True)
-        text_label.setMaximumWidth(max_width)
+        text_label.setMaximumWidth(int(max_width))
         widget_layout.addWidget(name_label)
         widget_layout.addWidget(text_label)
 
