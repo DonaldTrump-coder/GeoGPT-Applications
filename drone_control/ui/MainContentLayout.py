@@ -128,10 +128,12 @@ class MessageDisplay(QtWidgets.QScrollArea):
         container.setLayout(self.message_area)
         self.setWidgetResizable(True)
         self.setWidget(container)
+        self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.setWidgetResizable(True)
 
     #添加聊天信息（聊天文本以及是否为用户）
     def add_message(self,text,user):
-        message=OneMessage(text,user)
+        message=OneMessage(text,user,self.width()*0.7)
         self.message_area.addWidget(message)
         QtCore.QTimer.singleShot(0, self.scroll_to_bottom)
 
@@ -142,43 +144,63 @@ class MessageDisplay(QtWidgets.QScrollArea):
 
 #消息组件（头像+信息内容）
 class OneMessage(QtWidgets.QWidget):
-    def __init__(self, text, user,parent = None):
+    def __init__(self, text, user, max_width, parent = None):
         super().__init__(parent)
         layout=QtWidgets.QHBoxLayout()
         layout.setContentsMargins(5,5,5,5)
         layout.setSpacing(10)
 
         GPT_label = QtWidgets.QLabel()
-        GPT_label.setPixmap(QtGui.QPixmap("ui/icons/artificial-intelligence.png").scaled(40, 40, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation))
+        GPT_label.setPixmap(QtGui.QPixmap("icons/artificial-intelligence.png").scaled(40, 40, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation))
 
         user_label = QtWidgets.QLabel()
-        user_label.setPixmap(QtGui.QPixmap("ui/icons/user.png").scaled(40, 40, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation))
+        user_label.setPixmap(QtGui.QPixmap("icons/user.png").scaled(40, 40, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation))
 
         VLM_label = QtWidgets.QLabel()
-        VLM_label.setPixmap(QtGui.QPixmap("ui/icons/zoom.png").scaled(40, 40, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation))
+        VLM_label.setPixmap(QtGui.QPixmap("icons/zoom.png").scaled(40, 40, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation))
 
         text_widget=QtWidgets.QWidget()
         widget_layout=QtWidgets.QVBoxLayout(text_widget)
         name_label=QtWidgets.QLabel()
-        text_label = QtWidgets.QLabel(text)
-        text_label.setWordWrap(True)
+        text_label = QtWidgets.QTextBrowser()
+        text_label.setText(text)
+
+        text_label.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        text_label.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        text_label.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        text_label.setSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
+        text_label.setReadOnly(True)  # 只读，不允许编辑
+        text_label.document().setTextWidth(max_width*0.6)
+        height = int(text_label.document().size().height()) + 15  # +5是为了留点边距
+        text_label.setFixedHeight(height)
+
+        #text_label.setWordWrap(True)
+        text_label.setMaximumWidth(max_width)
         widget_layout.addWidget(name_label)
         widget_layout.addWidget(text_label)
 
         if user == "VLM":
             name_label.setText("VLM")
+            widget_layout.setAlignment(QtCore.Qt.AlignRight)
+            text_label.setStyleSheet("background-color: #d0f0ff; color: #003366;font-size: 14px;padding: 8px 12px;border-radius: 12px;")
+            name_label.setAlignment(QtCore.Qt.AlignRight)
             layout.addStretch()
             layout.addWidget(text_widget)
             layout.addWidget(VLM_label)
 
         elif user == "GeoGPT":
             name_label.setText("GeoGPT")
+            name_label.setAlignment(QtCore.Qt.AlignLeft)
+            text_label.setStyleSheet("background-color: #f0f0f0; color: #003366;font-size: 14px;padding: 8px 12px;border-radius: 12px;")
             layout.addWidget(GPT_label)
             layout.addWidget(text_widget)
             layout.addStretch()
 
         else:
             name_label.setText("user")
+            name_label.setAlignment(QtCore.Qt.AlignRight)
+            widget_layout.setAlignment(QtCore.Qt.AlignRight)
+            text_label.setStyleSheet("background-color: #b9f6ca; color: #003366;font-size: 14px;padding: 8px 12px;border-radius: 12px;")
             layout.addStretch()
             layout.addWidget(text_widget)
             layout.addWidget(user_label)
