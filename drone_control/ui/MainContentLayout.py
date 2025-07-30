@@ -32,7 +32,9 @@ class MultiMediaDisplay(QtWidgets.QWidget):
         self.image1=QtWidgets.QLabel()
         image_layout1.addWidget(self.image1)
         self.image1.setFixedSize(280, 160)
-        self.image_widget1.move(self.container.width()*0.01,self.container.height()*0.65)
+        self.image_widget1.move(int(self.container.width()*0.01),
+                                int(self.container.height()*0.65)
+                                )
         self.image1.setStyleSheet("background-color: #222; color: white; border: 1px solid #555;")
         self.image1.setAlignment(QtCore.Qt.AlignCenter)
 
@@ -46,7 +48,9 @@ class MultiMediaDisplay(QtWidgets.QWidget):
         self.image2=QtWidgets.QLabel()
         image_layout2.addWidget(self.image2)
         self.image2.setFixedSize(280, 160)
-        self.image_widget2.move(self.container.width(),self.container.height()*0.65)
+        self.image_widget2.move(int(self.container.width()),
+                                int(self.container.height()*0.65)
+                                )
         self.image2.setStyleSheet("background-color: #222; color: white; border: 1px solid #555;")
         self.image2.setAlignment(QtCore.Qt.AlignCenter)
 
@@ -142,20 +146,21 @@ class ChatDisplay(QtWidgets.QWidget):
 
         self.messagedisplay=MessageDisplay()
         self.input_box=QtWidgets.QTextEdit()
-        self.input_box.setFixedHeight(30)
+        
         self.input_box.setEnabled(False)
         self.send_button=QtWidgets.QPushButton("发送")
 
-        self.input_layout=QtWidgets.QHBoxLayout()
-        self.input_layout.addWidget(self.input_box)
-        self.input_layout.addWidget(self.send_button)
+        input_layout=QtWidgets.QHBoxLayout()
+        input_layout.addWidget(self.input_box)
+        input_layout.addWidget(self.send_button)
         self.input_widget=QtWidgets.QWidget()
-        self.input_widget.setLayout(self.input_layout)
+        self.input_widget.setLayout(input_layout)
 
         layout=QtWidgets.QVBoxLayout(self)
         layout.addWidget(self.chatlabel,2)
         layout.addWidget(self.messagedisplay,18)
         layout.addWidget(self.input_widget,3)
+        self.input_box.setFixedHeight(70)
         layout.setContentsMargins(3,3,3,3)
 
     def send_descriptions(self,text):
