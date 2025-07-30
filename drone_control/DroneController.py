@@ -65,7 +65,6 @@ class DroneController:
             #将图像解译成png格式
             frame = cv2.imdecode(np.frombuffer(response.image_data_uint8, np.uint8), cv2.IMREAD_COLOR)
             cv2.imwrite(save_dir+image_names[i], frame)
-            print(f"Saved {image_names[i]}")
         
         return save_dir+save_name
     
