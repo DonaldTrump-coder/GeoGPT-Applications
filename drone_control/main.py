@@ -136,22 +136,22 @@ class DroneTaskThread(QtCore.QThread):
             self.captured_signal.emit(img_path)
             img_name=img_path+"_"+action["get image"]+".png"
             self.analyzer.descriptions=self.analyzer.get_descriptions(img_name)
+            self.analyzer.add_messages('assistant',json.dumps(action))
+            self.message_signal.emit(['GeoGPT',f"Get image {action['get image']}"])
             if self.assist is True:
                 self.send_description_signal.emit(self.analyzer.descriptions)
                 self.loop=QtCore.QEventLoop()
                 self.loop.exec_()
                 self.analyzer.descriptions=self.assist_result
                 self.message_signal.emit(['user',"The"+action["get image"]+"image description is: "+self.analyzer.descriptions])
-                self.analyzer.add_messages('assistant',json.dumps(action))
                 self.drone.get_drone_state()
                 self.analyzer.get_drone_state_prompts(self.drone.x,self.drone.y,self.drone.z)
-                self.analyzer.add_messages('user',"The"+action["get image"]+"image description is: "+self.analyzer.descriptions+self.analyzer.state_prompts+"Please output next action.")
+                self.analyzer.add_messages('user',"The "+action["get image"]+" image description is: "+self.analyzer.descriptions+self.analyzer.state_prompts+"Please output next action.")
             else:
                 self.message_signal.emit(['VLM',"The"+action["get image"]+"image description is: "+self.analyzer.descriptions])
-                self.analyzer.add_messages('assistant',json.dumps(action))
                 self.drone.get_drone_state()
                 self.analyzer.get_drone_state_prompts(self.drone.x,self.drone.y,self.drone.z)
-                self.analyzer.add_messages('user',"The"+action["get image"]+"image description is: "+self.analyzer.descriptions+self.analyzer.state_prompts+"Please output next action.")
+                self.analyzer.add_messages('user',"The "+action["get image"]+" image description is: "+self.analyzer.descriptions+self.analyzer.state_prompts+"Please output next action.")
         elif list(action.keys())[0]=='land':
             self.stop=True
             self.message_signal.emit(['GeoGPT',"Land"])
