@@ -1,6 +1,6 @@
 from openai import OpenAI
 
-api_key="sk-ucdvpplmrrmguxcdciuxpdwftmrnstysomigzkjpgwlbkwsx"#API密钥（硅基流动上注册）
+api_key="api_key"#API密钥（硅基流动上注册）
 base_url="https://api.siliconflow.cn/v1"#硅基流动域名
 model="THUDM/GLM-4.1V-9B-Thinking"#硅基流动中的模型
 image_url="https://sf-maas-uat-prod.oss-cn-shanghai.aliyuncs.com/dog.png"

@@ -169,10 +169,10 @@ def main():
     drone = DroneController()
     # 配置硅基流动平台和GeoGPT的参数
     analyzer = Agent_Processor(
-        api_key_silicon="sk-ucdvpplmrrmguxcdciuxpdwftmrnstysomigzkjpgwlbkwsx",
+        api_key_silicon="api_key",
         siliconflow_url="https://api.siliconflow.cn/v1",
         siliconflow_model="THUDM/GLM-4.1V-9B-Thinking",
-        api_key_geogpt="sk-E9ZjEK01SiYTG78KDDUF",
+        api_key_geogpt="access_token",
         geogpt_url="https://geogpt.zero2x.org.cn/",
         connect_url="be-api/service/api/geoChat/generate",
         message_url="be-api/service/api/geoChat/sendMsg",

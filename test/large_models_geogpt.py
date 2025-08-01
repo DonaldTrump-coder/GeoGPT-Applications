@@ -105,7 +105,7 @@ def stream_chat_completion(access_token, user_message, api_url=None):
 if __name__ == "__main__":
     """Main function demonstrating API call"""
     # Configuration parameters
-    access_token = "sk-E9ZjEK01SiYTG78KDDUF"  # Replace with actual access token
+    access_token = "access_token"  # Replace with actual access token
     user_message = "你好，请介绍一下中国的长江"
 
     print(f"Sending message: {user_message}")

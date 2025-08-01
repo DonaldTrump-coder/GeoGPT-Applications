@@ -7,7 +7,7 @@ import json
 from image_description import get_file_list
 import os
 
-access_token="sk-E9ZjEK01SiYTG78KDDUF"
+access_token="access_token"
 base_rul="https://geogpt.zero2x.org.cn/" #GeoGPT的总域名
 connect_url="be-api/service/api/geoChat/generate"
 message_url="be-api/service/api/geoChat/sendMsg"

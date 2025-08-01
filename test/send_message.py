@@ -7,7 +7,7 @@ import json
 
 domain="https://geogpt.zero2x.org.cn" #GeoGPT的总域名
 url="/be-api/service/api/geoChat/sendMsg" #发送信息进行对话的网址
-access_token="sk-E9ZjEK01SiYTG78KDDUF" #API-key
+access_token="access_token" #API-key
 question="这张图片里有什么？" #进行对话的问题
 sessionId="882cd3e0-d19a-41cf-a285-5cfae7ea506f" #对话的ID（需要从连接模型的数据中获取）
 module="GeoGPT-R1-Preview" #选择模型

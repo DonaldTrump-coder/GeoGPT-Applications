@@ -141,11 +141,12 @@ class BboxIouCalculator:
 #计算交集和并集面积
         intersection_area = (x_right - x_left) * (y_bottom - y_top)
         bbox1_area = (bbox1_data[2] - bbox1_data[0]) * (bbox1_data[3] - bbox1_data[1])#json文件中bounding box的面积
-        bbox2_area = (bbox2_data[2] - bbox2_data[0]) * (bbox2_data[3] - bbox2_data[1])#txt文件中bounding box的面积
+        #bbox2_area = (bbox2_data[2] - bbox2_data[0]) * (bbox2_data[3] - bbox2_data[1])#txt文件中bounding box的面积
         #union_area = bbox1_area + bbox2_area - intersection_area
 
 #计算交并比
         iou = intersection_area / bbox1_area
+        #iou = intersection_area / union_area
         return iou
 
 

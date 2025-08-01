@@ -1,6 +1,6 @@
 import requests
 
-access_token="sk-E9ZjEK01SiYTG78KDDUF"
+access_token="access_token"
 url="https://geogpt.zero2x.org.cn/be-api/service/api/geoChat/generate"
 
 def create_session():

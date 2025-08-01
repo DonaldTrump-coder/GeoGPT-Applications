@@ -3,7 +3,7 @@ import base64
 import os
 import mimetypes
 
-api_key="sk-ucdvpplmrrmguxcdciuxpdwftmrnstysomigzkjpgwlbkwsx"#API密钥（硅基流动上注册）
+api_key="api_key"#API密钥（硅基流动上注册）
 base_url="https://api.siliconflow.cn/v1"#硅基流动域名
 model="THUDM/GLM-4.1V-9B-Thinking"#硅基流动中的模型
 
