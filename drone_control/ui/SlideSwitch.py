@@ -2,6 +2,7 @@ from PyQt5.QtCore import Qt, QRectF, QPropertyAnimation, pyqtProperty,pyqtSignal
 from PyQt5.QtWidgets import QWidget, QApplication
 from PyQt5.QtGui import QPainter, QColor, QBrush
 
+#滑动按钮控件（选择是否需要人工辅助修改描述）
 class SlideSwitch(QWidget):
     toggled=pyqtSignal(bool)
     def __init__(self, parent=None):

@@ -8,15 +8,15 @@ from ui.dronetask_display import Drone_Window
 from utils.text_tools import extract_last_json_dict
 import json
 
-stream_url="http://127.0.0.1"
+stream_url="http://127.0.0.1"#推流的地址（测试用的本机）
 os.environ['QTWEBENGINE_CHROMIUM_FLAGS'] = '--enable-gpu-rasterization --ignore-gpu-blacklist --enable-zero-copy'
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseOpenGLES)
 #利用GPU，进行推流渲染的加速
 
 #创建一个新线程，用来执行无人机任务（和UI分开）
 class DroneTaskThread(QtCore.QThread):
+    #信号槽，用来进行无人机控制端和前端数据交互
     log_signal = QtCore.pyqtSignal(str)
-    finished_signal = QtCore.pyqtSignal()
     captured_signal=QtCore.pyqtSignal(str)#拍摄照片后执行的信号
     assist_signal=QtCore.pyqtSignal(str)#获取修改后的描述文本信号
     send_description_signal=QtCore.pyqtSignal(str)#向界面发送描述文本
@@ -169,25 +169,28 @@ def main():
     drone = DroneController()
     # 配置硅基流动平台和GeoGPT的参数
     analyzer = Agent_Processor(
-        api_key_silicon="api_key",
-        siliconflow_url="https://api.siliconflow.cn/v1",
-        siliconflow_model="THUDM/GLM-4.1V-9B-Thinking",
-        api_key_geogpt="access_token",
-        geogpt_url="https://geogpt.zero2x.org.cn/",
-        connect_url="be-api/service/api/geoChat/generate",
-        message_url="be-api/service/api/geoChat/sendMsg",
-        large_models_url="be-api/service/api/model/v1/chat/completions",
-        geogpt_module="Qwen2.5-72B-GeoGPT"
+        api_key_silicon="api_key",#硅基流动的API密钥
+        siliconflow_url="https://api.siliconflow.cn/v1",#硅基流动的域名
+        siliconflow_model="THUDM/GLM-4.1V-9B-Thinking",#视觉语言模型
+        api_key_geogpt="access_token",#GeoGPT的API密钥
+        geogpt_url="https://geogpt.zero2x.org.cn/",#GeoGPT的域名
+        connect_url="be-api/service/api/geoChat/generate",#GeoGPT连接模型获取sessionId的地址
+        message_url="be-api/service/api/geoChat/sendMsg",#GeoGPT向模型发送消息的地址
+        large_models_url="be-api/service/api/model/v1/chat/completions",#GeoGPT大模型的开源地址
+        geogpt_module="Qwen2.5-72B-GeoGPT"#GeoGPT发送消息的模型
     )
 
     # 创建保存目录
-    os.makedirs("captures", exist_ok=True)
+    os.makedirs("captures", exist_ok=True)#无人机拍摄的相片保存在该文件夹下
 
     app=QtWidgets.QApplication(sys.argv)
-    window=Drone_Window(url=stream_url)
+    window=Drone_Window(url=stream_url)#创建窗口
     window.show()
 
+    #定义独立线程的UE无人机任务，和界面分开
     drone_task_thread=DroneTaskThread(drone,analyzer)
+
+    #定义无人机任务和界面交互的信号
     drone_task_thread.captured_signal.connect(window.show_captured_image)
     drone_task_thread.message_signal.connect(window.send_message)
     drone_task_thread.send_description_signal.connect(window.send_descriptions)
@@ -197,10 +200,11 @@ def main():
     window.get_assist_signal(drone_task_thread.assist_signal)
     #将获取修改后的描述文本信号送至界面
 
+    #开启UE线程
     drone_task_thread.start()
 
     sys.exit(app.exec_())
 
-
+#运行main函数
 if __name__ == "__main__":
     main()

@@ -1,6 +1,7 @@
 from PyQt5 import QtWidgets,QtGui,QtCore,QtWebEngineWidgets
 from SlideSwitch import SlideSwitch
 
+#左侧的视频和图像显示区域
 class MultiMediaDisplay(QtWidgets.QWidget):
     def __init__(self, url, parent = None):
         super().__init__(parent)

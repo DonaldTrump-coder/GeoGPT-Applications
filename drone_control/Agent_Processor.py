@@ -178,14 +178,16 @@ class Agent_Processor:
                 full_content += content
         return full_content
 
+    #将无人机当前的位置作为提示词每次进行输入
     def get_drone_state_prompts(self,x,y,z):
         self.state_prompts=f"The current position state information: The x-position of the drone is {x}. The y-position is {y}. The z-position is {z}."
 
+    #将无人机出发和目标的位置放入提示词中，告诉无人机
     def input_task_positions(self,starting_x,starting_y,starting_z,object_x,object_y,object_z):
         self.GeoGPT_prompts+=f"The starting point of the drone is [{starting_x}, {starting_y}, {starting_z}] as position in the format [x, y, z]. The object is near [{object_x}, {object_y}, {object_z}]. Please first approach the object position."
 
     #删除前面的信息
     def delete_message(self):
         if len(self.messages)>12:
+            self.messages.pop(1)#删除列表中第二个元素
             self.messages.pop(1)#删除列表中第三个元素
-            self.messages.pop(1)#删除列表中第四个元素

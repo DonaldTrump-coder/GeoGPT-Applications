@@ -15,6 +15,7 @@ class DroneController:
         self.starting_UE_position_x=0
         self.starting_UE_position_y=0
         self.starting_UE_position_z=0
+        #目标位置可修改，随UE场景而定
         self.object_UE_position_x=-1.5
         self.object_UE_position_y=66
         self.object_UE_position_z=0
@@ -55,27 +56,28 @@ class DroneController:
                 airsim.ImageRequest("right", airsim.ImageType.Scene)
             ]
         )
-        image_names=[save_name+"_front.png",save_name+"_down.png",save_name+"_back.png",save_name+"_left.png",save_name+"_right.png"]
+        image_names=[save_name+"_front.png",save_name+"_down.png",save_name+"_back.png",save_name+"_left.png",save_name+"_right.png"]#图像名作为列表
         save_dir=save_dir+"\\"
-        for i, response in enumerate(responses):
+        for i, response in enumerate(responses):#遍历所有拍摄的图像
             if response.width == 0:
                 print(f"Failed to get image {image_names[i]}")
                 continue
             
             #将图像解译成png格式
             frame = cv2.imdecode(np.frombuffer(response.image_data_uint8, np.uint8), cv2.IMREAD_COLOR)
-            cv2.imwrite(save_dir+image_names[i], frame)
+            cv2.imwrite(save_dir+image_names[i], frame)#保存图像
         
         return save_dir+save_name
     
+    #返回无人机起点
     def go_back(self):
         self.client.goHomeAsync().join()
         print("无人机已返回")
 
-    def turn_left(self,rad):
+    def turn_left(self,rad):#左转指定角度
         return self.client.rotateByYawRateAsync(-30, rad/30).join()
     
-    def turn_right(self,rad):
+    def turn_right(self,rad):#右转指定角度
         return self.client.rotateByYawRateAsync(30, rad/30).join()
     
     def move_forward(self,s):#向前移动指定距离

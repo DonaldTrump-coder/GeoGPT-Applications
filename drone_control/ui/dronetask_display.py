@@ -10,6 +10,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from CustomTitleBar import CustomTitleBar
 from MainContentLayout import MainContentLayout
 
+#主界面
 class Drone_Ui(object):
     def setupUi(self, 
                 Form:QtWidgets.QMainWindow
@@ -48,17 +49,19 @@ class Drone_Ui(object):
         Form.setWindowTitle(_translate("Form", "Form"))
 
 class Drone_Window(QtWidgets.QMainWindow,Drone_Ui):
+    #界面的主要控件
     def __init__(self, url):
         super().__init__()
         self.setupUi(self)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
 
-        self.title_bar=CustomTitleBar()
+        self.title_bar=CustomTitleBar()#标题栏的控件
         central_widget = QtWidgets.QWidget()
         layout = QtWidgets.QVBoxLayout(central_widget)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self.title_bar)
         
+        #标题栏右上角三个按钮控件的响应函数
         self.title_bar.btn_min.clicked.connect(self.showMinimized)
         self.title_bar.layout.addWidget(self.title_bar.btn_min)
 
@@ -74,6 +77,7 @@ class Drone_Window(QtWidgets.QMainWindow,Drone_Ui):
         self.setCentralWidget(central_widget)
         self.content.chat.send_button.clicked.connect(self.send_fixed_descriptions)
 
+    #最大化和恢复函数
     def toggle_max_restore(self):
         if self.isMaximized():
             self.showNormal()
@@ -100,6 +104,7 @@ class Drone_Window(QtWidgets.QMainWindow,Drone_Ui):
     def get_assist_signal(self,signal:QtCore.pyqtSignal):
         self.assist_signal=signal
 
+    #向无人机Agent发送修改后的描述
     def send_fixed_descriptions(self):
         text=self.content.chat.input_box.toPlainText().strip()
         if text:
