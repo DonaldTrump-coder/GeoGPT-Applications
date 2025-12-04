@@ -39,8 +39,13 @@ class Agent_Processor:
         #用GeoGPT进行决策的提示词
         self.GeoGPT_prompts="Now you are controlling a drone to finish a task of sending medical tools or medicine to a patient object. The object is a patient lying on the road. You need to control the drone to take off, cruising from the starting point to near the object, and land correctly beside the object place. You will be provided with the description of the elements of the image, the status information of the drone and the actions you can take. You need to choose to take actions to finish evey step during the task. To finish the task efficiently, you need to navigate near the right position, and change the location precisely."
 
+        #用VLM进行决策的提示词
+        self.VLM_prompts="Now you are controlling a drone to finish a task of sending medical tools or medicine to a patient object. The object is a patient lying on the road. You need to control the drone to take off, cruising from the starting point to near the object, and land correctly beside the object place. You will be provided with the description of the elements of the image, the status information of the drone and the actions you can take. You need to choose to take actions to finish evey step during the task. To finish the task efficiently, you need to navigate near the right position, and change the location precisely."
+
         #定义模型能够输出的指令
         self.control_prompts="The actions must be outputed in the dict format: { action: parameter }. Here are the actions that can be outputed: 1.'turn left': turn around the drone to its left side with the parameter as degree; 2.'turn right': turn around the drone to its right side with the parameter as degree; 3.'move forward': move the drone to its front side with the parameter as meter; 4.'move backward': move the drone to its back side with the parameter as meter; 5.'move up': move the drone to a higher place with the parameter as meter; 6.'move down': move the drone to a lower place with the parameter as meter; 7.'get image': obtain the next image taken from the drone, which has five camera directions, and the parameter must be one of the ['front', 'down', 'back', 'left', 'right'] (The image is in the form of natural language description, and you must understand it). 8.'take off': start the task and control the drone to take off to a certain height with the parameter as meter. 9.'land': when the drone arrives at the right place, land to finish the task, with the parameter as meters per second(landing speed). Usually, 'get image' must be taken after every other action, on order to control the drone accurately. If you can not see the task object or decide what to do, you should also get another-direction image again. The image can help you to not hit other buildings, and landing precisely beside the boject. You can try to move a bit and analyze the orientation according to the positional change to navigate to the object in the beginning process. Remember, you must find the correct direction and approach the object position, which is given above. You had better get an image after any other actions. Additionally, you need to finish the task as fast as possible. Only output an action dict at a time, for example { 'get image': 'front' }. Please give the action every time you are posted."
+
+        self.vlm_control_prompts="The actions must be outputed in the dict format: { action: parameter }. Here are the actions that can be outputed: 1.'turn left': turn around the drone to its left side with the parameter as degree; 2.'turn right': turn around the drone to its right side with the parameter as degree; 3.'move forward': move the drone to its front side with the parameter as meter; 4.'move backward': move the drone to its back side with the parameter as meter; 5.'move up': move the drone to a higher place with the parameter as meter; 6.'move down': move the drone to a lower place with the parameter as meter; 7.'get image': obtain the next image taken from the drone, which has five camera directions, and the parameter must be one of the ['front', 'down', 'back', 'left', 'right']. 8.'take off': start the task and control the drone to take off to a certain height with the parameter as meter. 9.'land': when the drone arrives at the right place, land to finish the task, with the parameter as meters per second(landing speed). Usually, 'get image' must be taken after every other action, on order to control the drone accurately. If you can not see the task object or decide what to do, you should also get another-direction image again. The image can help you to not hit other buildings, and landing precisely beside the boject. You can try to move a bit and analyze the orientation according to the positional change to navigate to the object in the beginning process. Remember, you must find the correct direction and approach the object position, which is given above. You had better get an image after any other actions. Additionally, you need to finish the task as fast as possible. Only output an action dict at a time, for example { 'get image': 'front' }. Please give the action every time you are posted."
 
     #调用硅基流动的视觉语言模型进行图像描述，返回图像描述的文本
     def get_descriptions(self,image_path:str)->str:
@@ -80,7 +85,7 @@ class Agent_Processor:
             return "Description failed"
 
     #添加AI模块中的角色和消息信息
-    def add_messages(self,role,content):
+    def add_messages(self, role, content):
         self.messages.append({
             "role": role,
             "content": content
@@ -117,6 +122,50 @@ class Agent_Processor:
                     full_content+=chunk.choices[0].delta.content
                 #if chunk.choices[0].delta.reasoning_content:#模型推理部分的内容（不需要的话可直接注释掉此部分）
                 #print(chunk.choices[0].delta.reasoning_content, end="", flush=True)
+            return full_content
+
+        except Exception as e:
+            print(f"\n【分析错误】{str(e)}")
+            return None
+        
+    def add_vlm_messages(self, role: str, image_path: str, prompt: str): # 把当前影像和文字加入消息记录中
+        if image_path is not None:
+            encoded_image=image2base64(image_path=image_path)
+            message={
+                        "role": role,
+                        "content": [
+                            {"type": "text", "text": prompt},
+                            {"type": "image_url", "image_url": {
+                                "url": encoded_image,"detail":"auto"
+                            }}
+                        ]
+                    }
+        else:
+            message={
+                        "role": role,
+                        "content": [
+                            {"type": "text", "text": prompt}
+                        ]
+                    }
+        self.messages.append(message)
+
+        
+    def post_vlm(self) -> str: # 调取视觉语言模型获得输出动作
+        try:
+            response = self.silicon_client.chat.completions.create(
+                model=self.silicon_model,  # 硅基流动平台的视觉模型
+                messages=self.messages,
+                stream=True
+            )
+
+            full_content = ""
+            for chunk in response:
+                if not chunk.choices:
+                    continue
+                if chunk.choices[0].delta.content:#模型新增的输出内容
+                    full_content+=chunk.choices[0].delta.content
+                #if chunk.choices[0].delta.reasoning_content:#模型推理部分的内容（不需要的话可直接注释掉此部分）
+                    #print(chunk.choices[0].delta.reasoning_content, end="", flush=True)
             return full_content
 
         except Exception as e:
@@ -185,9 +234,27 @@ class Agent_Processor:
     #将无人机出发和目标的位置放入提示词中，告诉无人机
     def input_task_positions(self,starting_x,starting_y,starting_z,object_x,object_y,object_z):
         self.GeoGPT_prompts+=f"The starting point of the drone is [{starting_x}, {starting_y}, {starting_z}] as position in the format [x, y, z]. The object is near [{object_x}, {object_y}, {object_z}]. Please first approach the object position."
+        self.VLM_prompts += f"The starting point of the drone is [{starting_x}, {starting_y}, {starting_z}] as position in the format [x, y, z]. The object is near [{object_x}, {object_y}, {object_z}]. Please first approach the object position."
 
     #删除前面的信息
     def delete_message(self):
         if len(self.messages)>12:
             self.messages.pop(1)#删除列表中第二个元素
             self.messages.pop(1)#删除列表中第三个元素
+
+if __name__ == "__main__":
+    agent = Agent_Processor(
+        api_key_silicon="sk-qgspupbsugmoknadoxohwuquyjfgtaljqspethzzywthvhgx",#硅基流动的API密钥
+        siliconflow_url="https://api.siliconflow.cn/v1",#硅基流动的域名
+        siliconflow_model="THUDM/GLM-4.1V-9B-Thinking",#视觉语言模型
+        api_key_geogpt="access_token",#GeoGPT的API密钥
+        geogpt_url="https://geogpt.zero2x.org.cn/",#GeoGPT的域名
+        connect_url="be-api/service/api/geoChat/generate",#GeoGPT连接模型获取sessionId的地址
+        message_url="be-api/service/api/geoChat/sendMsg",#GeoGPT向模型发送消息的地址
+        large_models_url="be-api/service/api/model/v1/chat/completions",#GeoGPT大模型的开源地址
+        geogpt_module="Qwen2.5-72B-GeoGPT"
+    )
+    agent.add_vlm_messages('user', "C:\\Users\\10527\\Desktop\\下载(1).png", "Tell me what is that in the image. Just using a word.")
+    #agent.add_vlm_messages('user', None, "这是什么?")
+    answer = agent.post_vlm()
+    print(answer)

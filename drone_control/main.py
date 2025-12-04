@@ -24,7 +24,7 @@ class DroneTaskThread(QtCore.QThread):
     #规定传输消息的格式：["发送者","消息内容"]
     message_signal=QtCore.pyqtSignal(list)#传输消息后执行的信号
 
-    def __init__(self, drone:DroneController, analyzer:Agent_Processor,parent=None):
+    def __init__(self, drone:DroneController, analyzer:Agent_Processor, parent=None):
         super().__init__(parent)
         self.drone=drone
         self.analyzer=analyzer
@@ -41,27 +41,113 @@ class DroneTaskThread(QtCore.QThread):
                                            object_y=self.drone.object_UE_position_y,
                                            object_z=self.drone.object_UE_position_z
                                            )
-        self.message_signal.emit(['GeoGPT','任务开始，无人机起飞'])
+        if self.assist is True:
+            self.message_signal.emit(['GeoGPT','任务开始，无人机起飞'])
+        else:
+            self.message_signal.emit(['VLM','任务开始，无人机起飞'])
         self.drone.takeoff(altitude=15)
         self.drone.get_drone_state()
         self.analyzer.get_drone_state_prompts(self.drone.x,self.drone.y,self.drone.z)
 
-        self.analyzer.add_messages('user',self.analyzer.GeoGPT_prompts+self.analyzer.control_prompts+self.analyzer.state_prompts)
-        self.analyzer.add_messages('assistant','{ "take off": 15 }')
+        if self.assist is True:
+            self.analyzer.add_messages('user',self.analyzer.GeoGPT_prompts+self.analyzer.control_prompts+self.analyzer.state_prompts)
+            self.analyzer.add_messages('assistant','{ "take off": 15 }')
+        else:
+            self.analyzer.add_vlm_messages('user', None, self.analyzer.VLM_prompts+self.analyzer.vlm_control_prompts+self.analyzer.state_prompts)
+            self.analyzer.add_vlm_messages('assistant', None, '{ "take off": 15 }')
         self.stop=False
 
         while(self.stop is False):
-            self.actions=self.analyzer.post_large_language_model()
-            self.action=extract_last_json_dict(self.actions)
-            self.analyze_action(self.action)
+            if self.assist is True:
+                self.actions=self.analyzer.post_large_language_model() # 调用模型
+            else:
+                self.actions=self.analyzer.post_vlm()
+            self.action=extract_last_json_dict(self.actions) # 从模型输出中解析出动作
+            if self.assist is True:
+                self.analyze_action(self.action)
+            else:
+                self.analyze_vlm_action(self.action)
 
-        self.message_signal.emit(['GeoGPT','任务完成，无人机降落'])
+        if self.assist is True:
+            self.message_signal.emit(['GeoGPT','任务完成，无人机降落'])
+        else:
+            self.message_signal.emit(['VLM','任务完成，无人机降落'])
         self.drone.land()
 
     def handle_assist(self,text):
         self.assist_result=text
         if self.loop is not None:
             self.loop.quit()
+
+    # 解析视觉语言模型的动作输出结果并存入消息记录
+    def analyze_vlm_action(self, action:dict):
+        self.analyzer.delete_message()
+        if action is None:#默认拍摄前方照片
+            img_path=self.drone.capture_images("captures",f"{self.drone.capture_times}")
+            self.drone.capture_times+=1
+            self.captured_signal.emit(img_path)
+            img_name=img_path+"_front.png"
+            self.message_signal.emit(['VLM',f"Get front image"])
+            action = {'get image': 'front'}
+            self.analyzer.add_vlm_messages('assistant', None, json.dumps(action))
+            self.drone.get_drone_state()
+            self.analyzer.get_drone_state_prompts(self.drone.x,self.drone.y,self.drone.z)
+            self.analyzer.add_vlm_messages('user', img_name, "Here is the front image." + self.analyzer.state_prompts + "Please output next action.")
+        elif list(action.keys())[0]=='turn left':
+            self.drone.turn_left(float(action['turn left']))
+            self.analyzer.add_vlm_messages('assistant', None, json.dumps(action))
+            self.drone.get_drone_state()
+            self.analyzer.get_drone_state_prompts(self.drone.x,self.drone.y,self.drone.z)
+            self.analyzer.add_vlm_messages('user', None, self.analyzer.state_prompts+"Please output next action.")
+            self.message_signal.emit(['VLM',f"Turn left {action['turn left']}°"])
+        elif list(action.keys())[0]=='turn right':
+            self.drone.turn_right(float(action['turn right']))
+            self.analyzer.add_vlm_messages('assistant', None, json.dumps(action))
+            self.drone.get_drone_state()
+            self.analyzer.get_drone_state_prompts(self.drone.x,self.drone.y,self.drone.z)
+            self.analyzer.add_vlm_messages('user', None, self.analyzer.state_prompts+"Please output next action.")
+            self.message_signal.emit(['VLM',f"Turn right {action['turn right']}°"])
+        elif list(action.keys())[0]=='move forward':
+            self.drone.move_forward(float(action['move forward']))
+            self.analyzer.add_vlm_messages('assistant', None, json.dumps(action))
+            self.drone.get_drone_state()
+            self.analyzer.get_drone_state_prompts(self.drone.x,self.drone.y,self.drone.z)
+            self.analyzer.add_vlm_messages('user', None, self.analyzer.state_prompts+"Please output next action.")
+            self.message_signal.emit(['VLM',f"Move forward {action['move forward']}m"])
+        elif list(action.keys())[0]=='move backward':
+            self.drone.move_backward(float(action['move backward']))
+            self.analyzer.add_vlm_messages('assistant', None, json.dumps(action))
+            self.drone.get_drone_state()
+            self.analyzer.get_drone_state_prompts(self.drone.x,self.drone.y,self.drone.z)
+            self.analyzer.add_vlm_messages('user', None, self.analyzer.state_prompts+"Please output next action.")
+            self.message_signal.emit(['VLM',f"Move backward {action['move backward']}m"])
+        elif list(action.keys())[0]=='move up':
+            self.drone.move_up(float(action['move up']))
+            self.analyzer.add_vlm_messages('assistant', None, json.dumps(action))
+            self.drone.get_drone_state()
+            self.analyzer.get_drone_state_prompts(self.drone.x,self.drone.y,self.drone.z)
+            self.analyzer.add_vlm_messages('user', None, self.analyzer.state_prompts+"Please output next action.")
+            self.message_signal.emit(['VLM',f"Move up {action['move up']}m"])
+        elif list(action.keys())[0]=='move down':
+            self.drone.move_up(float(action['move down']))
+            self.analyzer.add_vlm_messages('assistant', None, json.dumps(action))
+            self.drone.get_drone_state()
+            self.analyzer.get_drone_state_prompts(self.drone.x,self.drone.y,self.drone.z)
+            self.analyzer.add_vlm_messages('user', None, self.analyzer.state_prompts+"Please output next action.")
+            self.message_signal.emit(['VLM',f"Move down {action['move down']}m"])
+        elif list(action.keys())[0]=='get image':
+            img_path=self.drone.capture_images("captures",f"{self.drone.capture_times}")
+            self.drone.capture_times+=1
+            self.captured_signal.emit(img_path)
+            img_name=img_path+"_"+action["get image"]+".png"
+            self.analyzer.add_vlm_messages('assistant', None, json.dumps(action))
+            self.message_signal.emit(['VLM',f"Get {action['get image']} image"])
+            self.drone.get_drone_state()
+            self.analyzer.get_drone_state_prompts(self.drone.x,self.drone.y,self.drone.z)
+            self.analyzer.add_vlm_messages('user', img_name, "Here is the "+ action["get image"] + " image." + self.analyzer.state_prompts + "Please output next action.")
+        elif list(action.keys())[0]=='land':
+            self.stop=True
+            self.message_signal.emit(['VLM',"Land"])
 
     #解析模型输出，并直接执行模型指令
     def analyze_action(self, action:dict):
@@ -169,7 +255,7 @@ def main():
     drone = DroneController()
     # 配置硅基流动平台和GeoGPT的参数
     analyzer = Agent_Processor(
-        api_key_silicon="api_key",#硅基流动的API密钥
+        api_key_silicon="sk-qgspupbsugmoknadoxohwuquyjfgtaljqspethzzywthvhgx",#硅基流动的API密钥
         siliconflow_url="https://api.siliconflow.cn/v1",#硅基流动的域名
         siliconflow_model="THUDM/GLM-4.1V-9B-Thinking",#视觉语言模型
         api_key_geogpt="access_token",#GeoGPT的API密钥

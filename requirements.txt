@@ -5,6 +5,6 @@ tqdm
 opencv-python-headless
 numpy
 msgpack-rpc-python
-airsim
-PyQt5=5.15.11
-PyQtWebEngine=5.15.7
+airsim==1.2
+PyQt5==5.15.11
+PyQtWebEngine==5.15.7
