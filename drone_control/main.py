@@ -81,6 +81,7 @@ class DroneTaskThread(QtCore.QThread):
 
     # 解析视觉语言模型的动作输出结果并存入消息记录
     def analyze_vlm_action(self, action:dict):
+        print(action)
         self.analyzer.delete_message()
         if action is None:#默认拍摄前方照片
             img_path=self.drone.capture_images("captures",f"{self.drone.capture_times}")
