@@ -88,7 +88,7 @@ class DroneTaskThread(QtCore.QThread):
             self.drone.capture_times+=1
             self.captured_signal.emit(img_path)
             img_name=img_path+"_front.png"
-            self.message_signal.emit(['VLM',f"Get front image"])
+            self.message_signal.emit(['VLM',"Get front image"])
             action = {'get image': 'front'}
             self.analyzer.add_vlm_messages('assistant', None, json.dumps(action))
             self.drone.get_drone_state()

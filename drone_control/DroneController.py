@@ -54,8 +54,7 @@ class DroneController:
                 airsim.ImageRequest("back", airsim.ImageType.Scene),
                 airsim.ImageRequest("left", airsim.ImageType.Scene),
                 airsim.ImageRequest("right", airsim.ImageType.Scene)
-            ],
-            vehicle_name=""
+            ]
         )
         image_names=[save_name+"_front.png",save_name+"_down.png",save_name+"_back.png",save_name+"_left.png",save_name+"_right.png"]#图像名作为列表
         save_dir=save_dir+"\\"
