@@ -257,7 +257,7 @@ def main():
     analyzer = Agent_Processor(
         api_key_silicon="sk-qgspupbsugmoknadoxohwuquyjfgtaljqspethzzywthvhgx",#硅基流动的API密钥
         siliconflow_url="https://api.siliconflow.cn/v1",#硅基流动的域名
-        siliconflow_model="THUDM/GLM-4.1V-9B-Thinking",#视觉语言模型
+        siliconflow_model="Pro/Qwen/Qwen2.5-VL-7B-Instruct",#视觉语言模型
         api_key_geogpt="access_token",#GeoGPT的API密钥
         geogpt_url="https://geogpt.zero2x.org.cn/",#GeoGPT的域名
         connect_url="be-api/service/api/geoChat/generate",#GeoGPT连接模型获取sessionId的地址
